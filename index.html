@@ -343,6 +343,13 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
 .modal-section p{margin:0 0 8px;color:var(--muted);font-size:14px}
 .modal-section ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px}
 .modal-section li{margin-bottom:5px}
+.modal-facts{
+  background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 14%, transparent),color-mix(in srgb,var(--pink) 8%, transparent));
+  border-left:4px solid var(--gold);border-radius:12px;padding:14px 18px;margin-bottom:20px;
+}
+.modal-facts h3{color:var(--gold);margin:0 0 8px;font-size:17px}
+.modal-facts ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px}
+.modal-facts li{margin-bottom:6px}
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;
   border-top:1px solid color-mix(in srgb,var(--text) 12%, transparent)}
 .modal-actions a,.modal-actions button{
@@ -484,7 +491,7 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
     <section>
       <div class="section-head reveal">
         <h2>🧭 Путеводитель по достопримечательностям</h2>
-        <p>12 мест Приморского края. Отмечайте те, где вы уже были, — каждое добавляет печать. Нажмите на фото, чтобы открыть подробную карточку региона.</p>
+        <p>12 мест Приморского края. Отмечайте те, где вы уже были, — каждое добавляет печать. Нажмите на фото, чтобы открыть подробную карточку.</p>
       </div>
 
       <div class="guide-hero reveal">
@@ -644,73 +651,240 @@ const STOPS = [
    audio:"Владивосток. Город-порт на берегу Японского моря, конечная точка Транссибирской магистрали.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBJrx5xfcD3Ero6Kcn345LFqSaV78PHwvcG-IeorkeWQ&s=10",
    site:"https://visit-primorye.ru/news/chto-posmotret-vo-vladivostoke-dostoprimechatelnosti",
-   eat:"https://restaurantguru.ru/Kupol-Vladivostok"},
+   eat:"https://restaurantguru.ru/Kupol-Vladivostok",
+   facts:[
+     "Основан в 1860 году как военный пост «Владивосток».",
+     "Конечная точка Транссибирской магистрали — 9 288 км от Москвы.",
+     "Здесь находятся два самых крупных вантовых моста России: Золотой и Русский.",
+     "Владивосток — единственный город России, где есть фуникулёр и собственный островной кампус ДВФУ."
+   ],
+   highlights:[
+     "Золотой мост через бухту Золотой Рог (2012)",
+     "Русский мост — рекордсмен по длине пролёта (1104 м)",
+     "Набережная Цесаревича и маяк Токаревского",
+     "Приморский океанариум на острове Русский",
+     "Миллионка — исторический квартал"
+   ]},
   {emoji:"🐅",title:"Земля леопарда",place:"Хасанский район",tags:["nature"],
    desc:"Национальный парк, где живёт дальневосточный леопард — самая редкая большая кошка планеты. Здесь же обитает амурский тигр.",
    audio:"Земля леопарда — национальный парк в Приморье, где живёт дальневосточный леопард.",
    photo:"https://2spalnika.ru/wp-content/uploads/2023/08/zemlya-leoparda.png",
    site:"https://leopard-land.ru",
-   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d8520335-National_Park_Land_of_the_Leopard-Vladivostok_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d8520335-National_Park_Land_of_the_Leopard-Vladivostok_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Создан 9 апреля 2012 года для охраны дальневосточного леопарда.",
+     "К 2024 году численность леопардов выросла с 30 до ~120 особей.",
+     "Здесь обитает и амурский тигр — крупнейший подвид тигра в мире.",
+     "Парк входит в состав биосферного резервата ЮНЕСКО «Комсомольский».",
+     "Площадь — более 280 000 га, включает кластеры «Барсовый» и «Борисовское плато»."
+   ],
+   highlights:[
+     "Экологические тропы «Кравцовские водопады» и «Логово леопарда»",
+     "Центр реабилитации и реинтродукции тигров и других редких животных",
+     "Фотоловушки — реальные кадры леопардов и тигров",
+     "Музей природы и визит-центр в селе Барабаш",
+     "Наблюдение за птицами и редкими растениями"
+   ]},
   {emoji:"⛰️",title:"Сихотэ-Алинь",place:"Горная система",tags:["nature"],
    desc:"Крупнейшая горная страна края, объект Всемирного наследия ЮНЕСКО. Тайга, кедр, реликтовые растения.",
    audio:"Сихотэ-Алинь — горная система в Приморье, объект Всемирного наследия ЮНЕСКО.",
    photo:"https://visit-primorye.ru/_next/image?url=https%3A%2F%2Fvisit-primorye.ru%2Fuploads%2Fmedium_Sihote_Alinskij_zapovednik9_48a7c48603.webp&w=1920&q=75",
    site:"https://visit-primorye.ru/what-to-do/sihote-alinskij-zapovednik",
-   eat:"https://terneey.ru/pekarnya_hlebnoe_mesto"},
+   eat:"https://terneey.ru/pekarnya_hlebnoe_mesto",
+   facts:[
+     "Протяжённость — около 1 200 км вдоль побережья Японского моря.",
+     "В 2001 году включён в список Всемирного наследия ЮНЕСКО.",
+     "Высшая точка — гора Тордоки-Яни (2 090 м).",
+     "Здесь сохранились реликтовые леса, которым более 10 000 лет.",
+     "Обитают амурский тигр, гималайский медведь, горал, кабарга."
+   ],
+   highlights:[
+     "Сихотэ-Алинский заповедник — старейший на Дальнем Востоке (1935)",
+     "Гора Облачная и пик Тордоки-Яни",
+     "Кедрово-широколиственные леса",
+     "Медвежьи и тигриные тропы",
+     "Водопады и горные реки"
+   ]},
   {emoji:"🏝️",title:"Остров Русский",place:"Владивосток",tags:["city","history","nature"],
    desc:"Крупный остров с фортами, маяками, кампусом ДВФУ и мостом. Место саммита АТЭС-2012.",
    audio:"Остров Русский — крупный остров рядом с Владивостоком с фортами и маяками.",
    photo:"https://visit-primorye.ru/uploads/medium_Ostrov_Russkij_Darya_Agafonova_46a9586a95.jpg",
    site:"https://visit-primorye.ru/what-to-do/ostrov-russkij",
-   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d2331417-Russian_Island-Vladivostok_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d2331417-Russian_Island-Vladivostok_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Соединён с материком Русским мостом — одним из крупнейших вантовых в мире.",
+     "В 2012 году здесь прошёл саммит АТЭС.",
+     "На острове более 30 фортов и батарей Владивостокской крепости.",
+     "Здесь расположен кампус Дальневосточного федерального университета (ДВФУ).",
+     "Площадь острова — около 97,6 км²."
+   ],
+   highlights:[
+     "Русский мост (длина пролёта 1104 м)",
+     "Форт № 11 и Новосильцевская батарея",
+     "Маяк Токаревского",
+     "Приморский океанариум",
+     "Набережная и кампус ДВФУ"
+   ]},
   {emoji:"🦀",title:"Камчатский краб",place:"Приморье",tags:["food","nature"],
    desc:"Один из символов края. Деликатес и важная часть экономики региона.",
    audio:"Камчатский краб — символ Приморья и деликатес.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWHuRB2Vzjp7ZXF4eQsRQ9pJ69cXHI7f-WC3xhkrdzj8uQNvNyjZtvh_w&s=10",
    site:"https://visit-primorye.ru",
-   eat:"https://www.tripadvisor.ru/Restaurants-g298496-zfd10893-Vladivostok_Primorsky_Krai_Far_Eastern_District-Crab.html"},
+   eat:"https://www.tripadvisor.ru/Restaurants-g298496-zfd10893-Vladivostok_Primorsky_Krai_Far_Eastern_District-Crab.html",
+   facts:[
+     "Размах ног камчатского краба достигает 1,8 м, а вес — до 7 кг.",
+     "Живёт на глубине до 300 м, мигрирует на нерест.",
+     "Приморье — один из мировых лидеров по добыче краба.",
+     "Краб — важная статья экспорта России в Азию.",
+     "Владивосток — центр «крабовой» гастрономии России."
+   ],
+   highlights:[
+     "Крабовые аукционы и рестораны Владивостока",
+     "Музей «Приморский краб»",
+     "Гастрономический фестиваль «Краб-фест»",
+     "Рынки свежих морепродуктов",
+     "Экскурсии на краболовные суда"
+   ]},
   {emoji:"🏰",title:"Уссурийск",place:"Город",tags:["city","history"],
    desc:"Один из старейших городов Приморья. Основан в 1866 году.",
    audio:"Уссурийск — один из старейших городов Приморского края.",
    photo:"https://avatars.mds.yandex.net/get-altay/14234746/2a000001957da5d38ca0bc776d668a8b6502/L_height",
    site:"https://goprimorye.ru/cities/ussuriysk",
-   eat:"https://www.tripadvisor.ru/Restaurants-g784547-Ussuriysk_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/Restaurants-g784547-Ussuriysk_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Основан в 1866 году как село Никольское.",
+     "До 1957 года носил название Ворошилов.",
+     "Крупный транспортный узел Транссиба.",
+     "Здесь находится Уссурийский заповедник им. Комарова.",
+     "Город известен как центр сельского хозяйства Приморья."
+   ],
+   highlights:[
+     "Уссурийский заповедник",
+     "Дом-музей В. К. Арсеньева",
+     "Городской парк и озеро",
+     "Центральная площадь с фонтанами",
+     "Форт Уссурийский"
+   ]},
   {emoji:"⚓",title:"Находка",place:"Порт и город",tags:["city","history"],
    desc:"Крупный портовый город на берегу бухты Находка.",
    audio:"Находка — портовый город на юге Приморья.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRQZycP_gKRzGzLLxyc9vuNxV2XGN0n6-qK9gVpLyXrw&s=10",
    site:"https://www.tripadvisor.ru/Attractions-g298495-Activities-Nakhodka_Primorsky_Krai_Far_Eastern_District.html",
-   eat:"https://www.tripadvisor.ru/Restaurants-g298495-Nakhodka_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/Restaurants-g298495-Nakhodka_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Основан в 1940 году как портовый город.",
+     "Здесь находятся порты Восточный и Находка — крупнейшие в России на Тихом океане.",
+     "Город — центр судоремонта и рыбной промышленности.",
+     "Бухта Находка — одна из самых глубоководных и удобных на Дальнем Востоке.",
+     "Здесь начинается восточный морской коридор России."
+   ],
+   highlights:[
+     "Бухта Находка и порт Восточный",
+     "Мыс Астафьева",
+     "Остров Лисий",
+     "Гора Сестра",
+     "Набережная и маяк"
+   ]},
   {emoji:"🌋",title:"Мыс Песчаный",place:"Хасанский район",tags:["nature"],
    desc:"Живописный мыс с видами на Японское море и острова.",
    audio:"Мыс Песчаный — живописное место в Хасанском районе.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3i0TNponkwp3A-HKLRwmVlKf4NNjIH5w0y6Ck5UNHgtX5uvN9-Fh-cM&s=10",
    site:"https://www.sputnik8.com/ru/vladivostok/sights/poluostrow-peschanyj?utm_referrer=https%3A%2F%2Fwww.google.com%2F",
-   eat:"https://www.tripadvisor.ru/Restaurants-g298496-c33-Vladivostok_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/Restaurants-g298496-c33-Vladivostok_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Мыс расположен в Хасанском районе, в 40 км от Владивостока.",
+     "Известен как «Приморская Швейцария» из-за живописных бухт.",
+     "Здесь сохранились древние археологические памятники.",
+     "Мыс омывается водами Амурского залива.",
+     "Рядом — острова Фуругельма и Верховского."
+   ],
+   highlights:[
+     "Живописные бухты и песчаные пляжи",
+     "Скалы и гроты",
+     "Морские прогулки",
+     "Наблюдение за птицами",
+     "Рыбалка и дайвинг"
+   ]},
   {emoji:"🏞️",title:"Озеро Ханка",place:"Запад края",tags:["nature"],
    desc:"Крупнейшее озеро Дальнего Востока. Рамсарское угодье, дом для редких птиц и лотосов.",
    audio:"Озеро Ханка — крупнейшее озеро Дальнего Востока.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLcOPPxv7amd_nM5Ik83IRPTSL2ZtypNy7F5Q0QjE5qw&s=10",
    site:"https://visit-primorye.ru/what-to-do/ozero-hanka",
-   eat:"https://yandex.ru/maps/193150/xonqa/category/restaurant/184106394/?ll=60.777709%2C41.482257&sll=60.777709%2C41.482253&z=14"},
+   eat:"https://yandex.ru/maps/193150/xonqa/category/restaurant/184106394/?ll=60.777709%2C41.482257&sll=60.777709%2C41.482253&z=14",
+   facts:[
+     "Крупнейшее озеро Дальнего Востока — площадь 4 070 км².",
+     "Расположено на границе России и Китая.",
+     "В 1976 году включено в список Рамсарских угодий.",
+     "Здесь растут реликтовые лотосы Комарова.",
+     "Место обитания более 300 видов птиц, в том числе редких."
+   ],
+   highlights:[
+     "Лотосовые поля (август)",
+     "Ханкайский заповедник",
+     "Наблюдение за птицами (бердвотчинг)",
+     "Рыбалка на сазана и змееголова",
+     "Экологические тропы"
+   ]},
   {emoji:"⛩️",title:"Мыс Тобизина",place:"Владивосток",tags:["nature","history"],
    desc:"Одна из самых фотогеничных точек юга Владивостока. Скалы, ветер и море.",
    audio:"Мыс Тобизина — живописная скала на юге Владивостока.",
    photo:"https://7d9e88a8-f178-4098-bea5-48d960920605.selcdn.net/8791e910-5bad-43bf-a97c-075a5ee3d1fc/-/format/webp/-/resize/480x/",
    site:"https://visit-primorye.ru/what-to-do/mys-tobizina",
-   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d12694470-Cape_Tobizina-Vladivostok_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d12694470-Cape_Tobizina-Vladivostok_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Мыс назван в честь лейтенанта Тобизина, участника обороны Петропавловска-Камчатского.",
+     "Скалы высотой до 30 м обрываются в Японское море.",
+     "Здесь снимали сцены фильма «Три плюс два».",
+     "Мыс — популярная точка для фотосессий и встреч рассветов.",
+     "Рядом — бухта Тихоя и пляж Стеклянный."
+   ],
+   highlights:[
+     "Живописные скалы и бухты",
+     "Стеклянный пляж",
+     "Маяк Тобизина",
+     "Морские прогулки на каяках",
+     "Закаты над Японским морем"
+   ]},
   {emoji:"🌲",title:"Лазовский заповедник",place:"Лазовский район",tags:["nature"],
    desc:"Заповедная тайга, тигры, пятнистые олени и уникальные леса.",
    audio:"Лазовский заповедник — старейший заповедник Приморья.",
    photo:"https://cdn-storage-media.tass.ru/resize/688x456/tass_media/2022/03/07/n/1646652164540328_nGTz83bh.jpg",
    site:"https://visit-primorye.ru/what-to-do/lazovskij-gosudarstvennyj-zapovednik",
-   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d6981610-Lazo_State_National_Park_of_Kalpanov-Vladivostok_Primorsky_Krai_Far_Eastern_District.html"},
+   eat:"https://www.tripadvisor.ru/RestaurantsNear-g298496-d6981610-Lazo_State_National_Park_of_Kalpanov-Vladivostok_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Основан в 1935 году — один из старейших заповедников России.",
+     "Площадь — более 120 000 га.",
+     "Здесь обитают амурский тигр, пятнистый олень, горал.",
+     "Заповедник включает острова Петрова и Бельцова.",
+     "Уникальные леса: кедр, тис, рододендрон."
+   ],
+   highlights:[
+     "Остров Петрова с тисовой рощей",
+     "Экологические тропы",
+     "Наблюдение за тиграми и оленями",
+     "Бухта Поющий Ключ",
+     "Музей природы"
+   ]},
   {emoji:"🌅",title:"Мыс Крылова",place:"Хасанский район",tags:["nature"],
    desc:"Самая южная точка России. Здесь заканчивается земля и начинается Японское море.",
    audio:"Мыс Крылова — самая южная точка России.",
    photo:"https://offroad.kholmsk.ru/images/Туризм/Мыс_Крильон/11.jpg",
    site:"https://wikimapia.org/6041710/ru/Мыс-Крылова",
-   eat:"https://www.tripadvisor.ru/Restaurants-g298495-Nakhodka_Primorsky_Krai_Far_Eastern_District.html"}
+   eat:"https://www.tripadvisor.ru/Restaurants-g298495-Nakhodka_Primorsky_Krai_Far_Eastern_District.html",
+   facts:[
+     "Мыс Крылова (мыс Крильон) — самая южная точка России и Приморья.",
+     "Расположен на полуострове Крильон в Хасанском районе.",
+     "Назван в честь капитана И. Крылова.",
+     "Здесь находится маяк Крильон (1896).",
+     "Отсюда видно японский остров Хоккайдо в ясную погоду."
+   ],
+   highlights:[
+     "Маяк Крильон",
+     "Скалы и обрывы",
+     "Мыс — точка встречи Японского моря и Тихого океана",
+     "Пограничная зона (нужен пропуск)",
+     "Живописные закаты и рассветы"
+   ]}
 ];
 
 /* ============ REGION INFO ============ */
@@ -837,7 +1011,7 @@ function renderGuide(){
     const el=document.createElement('div');
     el.className='place reveal'+(isV?' visited':'');
     el.innerHTML=`
-      <div class="place-img" data-open="${i}" title="Нажмите, чтобы открыть подробную карточку региона">
+      <div class="place-img" data-open="${i}" title="Нажмите, чтобы открыть подробную карточку">
         <img src="${s.photo}" alt="${s.title}" loading="lazy"
              onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#1f6feb,#0b1220)'">
         <div class="num">${i+1} / ${STOPS.length}</div>
@@ -899,11 +1073,28 @@ function openPlaceModal(i){
   modalTitle.textContent = s.title;
   modalPlace.textContent = '📍 ' + s.place + ' · ' + s.emoji;
 
+  /* Для Владивостока (индекс 0) — оставляем общую карточку региона,
+     для остальных — блок с индивидуальными фактами и highlights. */
+  const isVladivostok = (i === 0);
+
+  const specificFactsHTML = (!isVladivostok && s.facts) ? `
+    <div class="modal-facts">
+      <h3>💡 Интересные факты</h3>
+      <ul>${s.facts.map(f=>`<li>${f}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h3>✨ Что здесь есть</h3>
+      <ul>${s.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
+    </div>
+  ` : '';
+
   modalBody.innerHTML = `
     <div class="modal-section">
       <h3>📖 О достопримечательности</h3>
       <p>${s.desc}</p>
     </div>
+
+    ${specificFactsHTML}
 
     <div class="modal-grid">
       <div class="modal-card"><div class="mc-label">Площадь края</div><div class="mc-value">${r.geography.area}</div></div>
@@ -913,7 +1104,7 @@ function openPlaceModal(i){
     </div>
 
     <div class="modal-section">
-      <h3>🗺 География</h3>
+      <h3>🗺 География края</h3>
       <ul>
         <li><strong>Рельеф:</strong> ${r.geography.relief}</li>
         <li><strong>Климат:</strong> ${r.geography.climate}</li>
@@ -974,7 +1165,7 @@ function openPlaceModal(i){
     </div>
 
     <div class="modal-section">
-      <h3>💡 Интересные факты</h3>
+      <h3>💡 Интересные факты о крае</h3>
       <ul>${r.facts.map(f=>`<li>${f}</li>`).join('')}</ul>
     </div>
 

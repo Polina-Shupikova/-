@@ -3,22 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Приморье: Край у Океана — интерактивный путеводитель</title>
-<meta name="description" content="Интерактивный путеводитель по Приморскому краю: карта, аудиогид, фотогалерея, мини-игра и викторина.">
+<title>Приморье: Край у Океана — путеводитель по достопримечательностям</title>
+<meta name="description" content="Интерактивный путеводитель по достопримечательностям Приморского края: фото, чек-лист посещений, аудиогид, приз за полный маршрут.">
 <style>
 :root{
   --bg:#08101f; --bg2:#0d1a31; --card:#132241; --card2:#1a2e57;
   --text:#eaf1ff; --muted:#9fb3d9; --accent:#3ddc97; --accent2:#4ea1ff;
   --gold:#ffd166; --pink:#ff6bcb; --danger:#ff6b6b;
   --shadow:0 18px 40px rgba(0,0,0,.4); --radius:20px;
-  --glass: color-mix(in srgb, var(--card) 75%, transparent);
 }
 body.light{
   --bg:#f4f7ff; --bg2:#e6eeff; --card:#ffffff; --card2:#eef4ff;
   --text:#0d1b33; --muted:#4a5b7a; --accent:#0f9d6a; --accent2:#1f6feb;
   --gold:#c98a00; --pink:#c2189a; --danger:#d63b3b;
   --shadow:0 18px 40px rgba(20,40,90,.12);
-  --glass: color-mix(in srgb, var(--card) 80%, transparent);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -62,7 +60,7 @@ header{position:sticky;top:0;z-index:1000;backdrop-filter:blur(14px);
 .page.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-.hero{position:relative;padding:70px 0 50px}
+.hero{position:relative;padding:70px 0 30px}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
 .badge{display:inline-block;padding:6px 14px;border-radius:999px;font-size:13px;
   background:color-mix(in srgb,var(--accent) 18%, transparent);color:var(--accent);
@@ -79,6 +77,7 @@ h1{font-size:clamp(32px,5.5vw,64px);line-height:1.05;margin:0 0 16px;
   font-family:inherit;font-size:15px;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121f}
 .btn-pink{background:linear-gradient(135deg,var(--pink),var(--accent2));color:#fff}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--pink));color:#2a1a00}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid color-mix(in srgb,var(--text) 25%, transparent)}
 .btn:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
 .btn:active{transform:translateY(-1px) scale(.98)}
@@ -96,6 +95,114 @@ h1{font-size:clamp(32px,5.5vw,64px);line-height:1.05;margin:0 0 16px;
   background:#fff;margin-right:6px;animation:blink 1.6s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* ================= PUTEVIDITEL ================= */
+.guide-hero{
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent2) 16%, transparent),color-mix(in srgb,var(--pink) 10%, transparent));
+  border-radius:28px;padding:26px;border:1px solid color-mix(in srgb,var(--accent) 35%, transparent);
+  box-shadow:var(--shadow);margin-bottom:26px;
+}
+.guide-hero h2{margin:0 0 10px;font-size:clamp(22px,3vw,32px)}
+.guide-hero p{color:var(--muted);margin:0 0 16px}
+.progress-wrap{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.progress-bar{
+  flex:1;min-width:200px;height:16px;border-radius:999px;
+  background:color-mix(in srgb,var(--text) 12%, transparent);overflow:hidden;
+}
+.progress-bar span{
+  display:block;height:100%;width:0%;border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--pink),var(--gold));
+  transition:width .5s cubic-bezier(.34,1.56,.64,1);
+}
+.progress-num{font-weight:800;color:var(--accent);font-size:15px}
+
+.stamps{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.stamp{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--text) 10%, transparent);
+  border:2px dashed color-mix(in srgb,var(--text) 25%, transparent);
+  font-size:20px;color:color-mix(in srgb,var(--text) 35%, transparent);
+  transition:all .3s;
+}
+.stamp.earned{
+  background:linear-gradient(135deg,var(--gold),var(--pink));
+  color:#2a1a00;border:2px solid var(--gold);
+  box-shadow:0 0 16px color-mix(in srgb,var(--gold) 55%, transparent);
+  animation:stampIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes stampIn{0%{transform:scale(.4) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
+
+/* большие карточки достопримечательностей */
+.guide-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px;
+}
+.place{
+  position:relative;border-radius:24px;overflow:hidden;background:var(--card);
+  box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--text) 10%, transparent);
+  transition:transform .35s, box-shadow .35s, border-color .35s;
+  display:flex;flex-direction:column;
+}
+.place:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.place.visited{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 20px 50px rgba(61,220,151,.3)}
+.place-img{
+  position:relative;height:220px;overflow:hidden;background:linear-gradient(135deg,#1f6feb,#0b1220);
+}
+.place-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.place:hover .place-img img{transform:scale(1.08)}
+.place-img .num{
+  position:absolute;top:14px;left:14px;background:rgba(0,0,0,.7);
+  color:#fff;font-weight:800;font-size:14px;padding:6px 12px;border-radius:999px;backdrop-filter:blur(8px);
+}
+.place-img .emoji-tag{
+  position:absolute;top:14px;right:14px;font-size:26px;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.6));
+}
+.place-img .visited-badge{
+  position:absolute;bottom:14px;left:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121f;
+  font-weight:800;font-size:12px;padding:6px 12px;border-radius:999px;
+  display:none;
+}
+.place.visited .place-img .visited-badge{display:inline-block;animation:pop .4s}
+
+.place-body{padding:18px;display:flex;flex-direction:column;gap:12px;flex:1}
+.place-body h3{margin:0;font-size:20px}
+.place-body .meta{color:var(--muted);font-size:13px}
+.place-body .desc{color:var(--muted);font-size:14px}
+.place-body .tags{display:flex;gap:6px;flex-wrap:wrap}
+.place-body .links{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.place-body .links a{display:inline-flex;align-items:center;gap:6px}
+.place-body .links a:hover{color:var(--accent)}
+.place-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.place-actions button{
+  flex:1;min-width:120px;padding:10px 14px;border-radius:12px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:700;transition:all .2s;
+}
+.btn-visit{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121f;
+}
+.btn-visit.done{background:color-mix(in srgb,var(--text) 15%, transparent);color:var(--text)}
+.btn-visit:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn-mini-ghost{
+  background:color-mix(in srgb,var(--accent2) 20%, transparent);color:var(--text);
+}
+.btn-mini-ghost:hover{background:color-mix(in srgb,var(--accent2) 35%, transparent)}
+
+/* prize banner */
+.prize-banner{
+  margin-top:26px;padding:22px;border-radius:24px;text-align:center;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 22%, transparent),color-mix(in srgb,var(--pink) 15%, transparent));
+  border:2px dashed var(--gold);
+  display:none;
+}
+.prize-banner.show{display:block;animation:pop .5s}
+.prize-banner h3{margin:0 0 8px;font-size:24px;color:var(--gold)}
+.prize-banner p{color:var(--muted);margin:0 0 14px}
+
+@keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* ================= остальное ================= */
 .live-block{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;align-items:stretch;
   background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);
   border:1px solid color-mix(in srgb,var(--danger) 40%, transparent);}
@@ -121,73 +228,10 @@ section{padding:50px 0}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
 .fact{background:var(--card);border:1px solid color-mix(in srgb,var(--text) 10%, transparent);
   border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);transition:transform .25s,border-color .25s;
-  cursor:pointer;position:relative;overflow:hidden;}
+  cursor:pointer;}
 .fact:hover{transform:translateY(-6px);border-color:var(--accent)}
-.fact::after{content:'';position:absolute;inset:0;opacity:0;
-  background:radial-gradient(400px 200px at var(--mx,50%) var(--my,50%), color-mix(in srgb,var(--accent) 25%, transparent), transparent 60%);
-  transition:opacity .3s;pointer-events:none;}
-.fact:hover::after{opacity:1}
 .fact .num{font-size:32px;font-weight:900;color:var(--accent);line-height:1}
 .fact .cap{color:var(--muted);font-size:14px;margin-top:8px}
-
-.explorer{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
-.map-card{background:var(--card);border-radius:var(--radius);padding:18px;
-  border:1px solid color-mix(in srgb,var(--text) 10%, transparent);box-shadow:var(--shadow);
-  position:sticky;top:86px;}
-.map-card h3{margin:0 0 12px;font-size:18px}
-.map-svg{width:100%;height:auto;display:block;border-radius:14px;
-  background:linear-gradient(160deg,#0a1830,#12305c);overflow:visible}
-body.light .map-svg{background:linear-gradient(160deg,#dbe8ff,#eef4ff)}
-
-.pin{cursor:pointer;transform-box:fill-box;transform-origin:center;
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
-.pin:hover,.pin:focus{transform:scale(1.45);outline:none}
-.pin circle.base{fill:#e8a84a;stroke:#3a2a10;stroke-width:2;transition:fill .3s}
-.pin:hover circle.base,.pin.active circle.base{fill:var(--gold)}
-.pin .ear{fill:#c98a00;stroke:#3a2a10;stroke-width:1.5}
-.pin .spot{fill:#3a2a10;opacity:.85}
-.pin .eye{fill:#0d1b33}
-.pin .nose{fill:#3a2a10}
-.pin .whisker{stroke:#3a2a10;stroke-width:1;stroke-linecap:round;fill:none;opacity:.9}
-.pin.active circle.base{stroke:var(--accent);stroke-width:2.5}
-
-.route-line{fill:none;stroke:var(--accent2);stroke-width:2.5;stroke-dasharray:6 6;opacity:.8}
-
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
-
-.stops{display:flex;flex-direction:column;gap:14px}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.chip{padding:8px 14px;border-radius:999px;font-size:13px;cursor:pointer;
-  background:var(--card);border:1px solid color-mix(in srgb,var(--text) 15%, transparent);
-  color:var(--text);transition:all .2s;font-family:inherit;}
-.chip.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121f;border-color:transparent;font-weight:700}
-.stop{background:var(--card);border:1px solid color-mix(in srgb,var(--text) 10%, transparent);
-  border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer;
-  transition:transform .25s,border-color .25s;display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;}
-.stop:hover{transform:translateX(6px);border-color:var(--accent2)}
-.stop.active{border-color:var(--accent);background:var(--card2)}
-.stop .emoji{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;font-size:30px;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 25%, transparent),color-mix(in srgb,var(--accent2) 25%, transparent));}
-.stop h4{margin:0 0 4px;font-size:18px}
-.stop .meta{font-size:13px;color:var(--muted);margin-bottom:6px}
-.stop .desc{font-size:14px;color:var(--muted);display:none}
-.stop.active .desc{display:block;animation:fadeIn .4s}
-.stop .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.mini{padding:7px 12px;border-radius:10px;font-size:13px;cursor:pointer;border:none;
-  background:color-mix(in srgb,var(--accent2) 20%, transparent);color:var(--text);font-family:inherit;transition:background .2s;}
-.mini:hover{background:color-mix(in srgb,var(--accent2) 35%, transparent)}
-.tag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:999px;
-  background:color-mix(in srgb,var(--gold) 22%, transparent);color:var(--gold);
-  margin-right:6px;margin-top:4px;}
-
-/* stop-photo + links */
-.stop-photo{margin-top:10px;border-radius:12px;overflow:hidden;max-height:160px;background:var(--card2)}
-.stop-photo img{width:100%;height:160px;object-fit:cover}
-.stop-links{display:flex;flex-direction:column;gap:6px;margin-top:10px;font-size:13px}
-.stop-links a{display:inline-flex;align-items:center;gap:6px;color:var(--accent2)}
-.stop-links a:hover{color:var(--accent)}
 
 .timeline{position:relative;padding-left:26px}
 .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;
@@ -209,62 +253,6 @@ body.light .map-svg{background:linear-gradient(160deg,#dbe8ff,#eef4ff)}
 .card-photo .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
   background:linear-gradient(180deg,transparent,rgba(0,0,0,.85));color:#fff;font-size:14px;font-weight:600;}
 .card-photo .cap small{display:block;font-weight:400;opacity:.85;font-size:12px}
-
-.slider{position:relative;width:100%;height:340px;border-radius:20px;overflow:hidden;
-  box-shadow:var(--shadow);user-select:none;cursor:ew-resize;}
-.slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
-.slider .after{clip-path:inset(0 0 0 50%)}
-.slider .handle{position:absolute;top:0;bottom:0;left:50%;width:4px;background:#fff;
-  box-shadow:0 0 0 3px rgba(0,0,0,.35);transform:translateX(-50%);pointer-events:none;}
-.slider .handle::after{content:'⇔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:44px;height:44px;border-radius:50%;background:#fff;color:#0d1b33;display:grid;place-items:center;
-  font-size:20px;font-weight:900;box-shadow:0 6px 20px rgba(0,0,0,.4);}
-.slider .tagl,.slider .tagr{position:absolute;bottom:16px;background:rgba(0,0,0,.65);color:#fff;
-  padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;}
-.slider .tagl{left:16px}.slider .tagr{right:16px}
-
-.game{background:var(--card);border-radius:var(--radius);padding:24px;
-  border:1px solid color-mix(in srgb,var(--text) 10%, transparent);box-shadow:var(--shadow);}
-.game-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.score-box{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121f;
-  padding:8px 16px;border-radius:12px;font-weight:800;font-size:15px;}
-.game-zone{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.pool{display:flex;flex-direction:column;gap:10px;min-height:120px}
-.slot-zone{display:flex;flex-direction:column;gap:10px}
-.drop-slot{display:flex;align-items:center;gap:12px;border:2px dashed color-mix(in srgb,var(--text) 25%, transparent);
-  border-radius:14px;padding:10px 14px;min-height:54px;background:color-mix(in srgb,var(--card2) 60%, transparent);transition:all .2s;}
-.drop-slot.filled{border-style:solid;border-color:var(--accent)}
-.drop-slot.over{background:color-mix(in srgb,var(--accent) 20%, transparent);border-color:var(--accent)}
-.drop-slot.ok{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%, transparent)}
-.drop-slot.bad{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%, transparent)}
-.drop-slot .num{width:30px;height:30px;border-radius:50%;background:var(--card2);display:grid;place-items:center;
-  font-weight:800;font-size:14px;color:var(--accent);flex-shrink:0;}
-.drag-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card2);
-  border-radius:14px;cursor:grab;border:1px solid color-mix(in srgb,var(--text) 12%, transparent);
-  font-size:14px;font-weight:600;transition:transform .15s,box-shadow .2s;}
-.drag-item:active{cursor:grabbing}
-.drag-item.dragging{opacity:.4;transform:scale(.95)}
-.drag-item .ico{font-size:22px}
-.win-box{margin-top:20px;padding:18px;border-radius:16px;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 20%, transparent),color-mix(in srgb,var(--accent) 15%, transparent));
-  border:1px dashed var(--gold);display:none;}
-.win-box.show{display:block;animation:pop .5s}
-@keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
-
-.quiz{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
-  border:1px solid color-mix(in srgb,var(--text) 10%, transparent);}
-.quiz-q{font-size:18px;font-weight:700;margin-bottom:14px}
-.quiz-opts{display:flex;flex-direction:column;gap:10px}
-.quiz-opt{padding:13px 16px;border-radius:12px;cursor:pointer;font-size:15px;background:var(--card2);
-  border:1px solid color-mix(in srgb,var(--text) 10%, transparent);transition:all .2s;
-  font-family:inherit;color:var(--text);text-align:left;}
-.quiz-opt:hover{border-color:var(--accent2);transform:translateX(4px)}
-.quiz-opt.right{background:color-mix(in srgb,var(--accent) 25%, transparent);border-color:var(--accent)}
-.quiz-opt.wrong{background:color-mix(in srgb,var(--danger) 25%, transparent);border-color:var(--danger)}
-.quiz-progress{display:flex;gap:6px;margin-bottom:16px}
-.quiz-progress i{height:6px;flex:1;background:color-mix(in srgb,var(--text) 15%, transparent);border-radius:3px;transition:background .3s}
-.quiz-progress i.done{background:var(--accent)}
-.quiz-result{text-align:center;padding:20px;font-size:18px}
 
 .acc-item{background:var(--card);border-radius:14px;margin-bottom:10px;overflow:hidden;
   border:1px solid color-mix(in srgb,var(--text) 10%, transparent);box-shadow:var(--shadow);}
@@ -294,13 +282,23 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
 
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:4000}
 
+/* бейдж приза */
+.medal{
+  display:inline-block;width:120px;height:120px;border-radius:50%;
+  background:conic-gradient(from 210deg,var(--gold),var(--pink),var(--gold));
+  box-shadow:0 0 40px rgba(255,209,102,.6);
+  position:relative;margin:10px auto;
+}
+.medal::before{
+  content:'🐆';position:absolute;inset:8px;border-radius:50%;
+  background:var(--bg);display:grid;place-items:center;font-size:50px;
+}
+
 @media (max-width:900px){
   .hero-grid{grid-template-columns:1fr}
-  .explorer{grid-template-columns:1fr}
-  .map-card{position:static}
-  .game-zone{grid-template-columns:1fr}
   .live-block{grid-template-columns:1fr}
   .nav-links button{padding:6px 10px;font-size:13px}
+  .place-img{height:190px}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -316,12 +314,10 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
     <div class="logo" onclick="go('home')"><span class="dot"></span> Приморье · Край у Океана</div>
     <nav class="nav-links" id="navLinks">
       <button data-page="home" class="active">🏠 Главная</button>
-      <button data-page="route"> Маршрут</button>
-      <button data-page="history"> История</button>
-      <button data-page="gallery">Галерея</button>
-      <button data-page="game"> Игра</button>
-      <button data-page="quiz"> Викторина</button>
-      <button data-page="bonus">🎁 Бонус</button>
+      <button data-page="route">🧭 Путеводитель</button>
+      <button data-page="history">📜 История</button>
+      <button data-page="gallery">📸 Галерея</button>
+      <button data-page="bonus">🎁 Приз</button>
     </nav>
     <button class="theme-btn" id="themeBtn">🌙 Тема</button>
   </div>
@@ -334,17 +330,17 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
     <section class="hero">
       <div class="hero-grid">
         <div>
-          <span class="badge">Интерактивный путеводитель · 12 остановок · 7 разделов</span>
-          <h1>Приморский край:<br>на краю земли и у океана</h1>
+          <span class="badge">Путеводитель по 12 достопримечательностям · фото · аудиогид</span>
+          <h1>Приморский край:<br>путешествие к океану</h1>
           <p class="lead">
-            Регион, где сопки встречаются с Японским морем, тигры ходят по тайге,
-            а Владивосток смотрит на восток. Пройдите маршрут, услышьте аудиогид,
-            сыграйте в мини-игру и откройте бонусный рецепт.
+            От Владивостока до мыса Крылова — 12 жемчужин региона.
+            Отмечайте места, где вы были, собирайте печати путешественника
+            и получите приз за полный маршрут.
           </p>
           <div class="cta">
-            <button class="btn btn-primary" onclick="go('route')"> Начать маршрут</button>
-            <button class="btn btn-pink" onclick="go('game')">🎮 Мини-игра</button>
-            <button class="btn btn-ghost" onclick="go('gallery')"> Галерея</button>
+            <button class="btn btn-primary" onclick="go('route')">🧭 Открыть путеводитель</button>
+            <button class="btn btn-gold" onclick="go('bonus')">🎁 Мой приз</button>
+            <button class="btn btn-ghost" onclick="go('gallery')">📸 Галерея</button>
           </div>
         </div>
         <div class="photo-hero" id="photoHero">
@@ -358,11 +354,10 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
       </div>
     </section>
 
-    <!-- LIVE BLOCK -->
     <section>
       <div class="section-head reveal">
-        <h2>Онлайн-панорама: Золотой мост</h2>
-        <p>Живое окно города. Нажмите кнопку, чтобы открыть трансляцию в новой вкладке — так вы не зависите от встраивания.</p>
+        <h2>🔴 Онлайн-панорама: Золотой мост</h2>
+        <p>Живое окно города. Нажмите кнопку, чтобы открыть трансляцию в новой вкладке.</p>
       </div>
       <div class="live-block reveal">
         <div class="live-frame">
@@ -374,12 +369,10 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
         </div>
         <div class="live-side">
           <h3>Золотой мост</h3>
-          <p>Один из самых узнаваемых символов Владивостока. Мост через бухту Золотой Рог соединяет центр города с мысом Чуркин.</p>
+          <p>Один из самых узнаваемых символов Владивостока. Соединяет центр города с мысом Чуркин.</p>
           <div class="live-actions">
-            <a class="btn btn-primary" href="https://www.geocam.ru/online/golden-bridge/"
-               target="_blank" rel="noopener">▶ Смотреть трансляцию</a>
-            <a class="btn btn-ghost" href="https://yandex.ru/maps/75/vladivostok/?ll=131.885485%2C43.115536&z=15&l=stv%2Csta"
-               target="_blank" rel="noopener">Открыть панораму на карте</a>
+            <a class="btn btn-primary" href="https://www.geocam.ru/online/golden-bridge/" target="_blank" rel="noopener">▶ Смотреть трансляцию</a>
+            <a class="btn btn-ghost" href="https://yandex.ru/maps/75/vladivostok/?ll=131.885485%2C43.115536&z=15&l=stv%2Csta" target="_blank" rel="noopener">🗺 Открыть панораму</a>
             <a class="btn btn-ghost" href="https://izi.travel/ru/search?q=Владивосток" target="_blank" rel="noopener">🎧 Аудиогиды IZI.Travel</a>
           </div>
         </div>
@@ -394,7 +387,7 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
       <div class="facts">
         <div class="fact reveal" data-tip="Приморский край больше, чем, например, Греция или Болгария"><div class="num" data-count="164673">0</div><div class="cap">км² — площадь края</div></div>
         <div class="fact reveal" data-tip="От Владивостока до Москвы ~ 9 000 км по прямой"><div class="num" data-count="1800">0</div><div class="cap">км береговой линии Японского моря</div></div>
-        <div class="fact reveal"><div class="num" data-count="12">0</div><div class="cap">остановок в нашем маршруте</div></div>
+        <div class="fact reveal"><div class="num" data-count="12">0</div><div class="cap">достопримечательностей в путеводителе</div></div>
         <div class="fact reveal" data-tip="Мыс Крылова — самая южная точка России"><div class="num" data-count="1">0</div><div class="cap">самая южная точка России</div></div>
         <div class="fact reveal"><div class="num" data-count="4">0</div><div class="cap">климатические зоны: от тайги до субтропиков</div></div>
         <div class="fact reveal"><div class="num" data-count="1938">0</div><div class="cap">год образования Приморского края</div></div>
@@ -409,11 +402,11 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
       <div class="acc">
         <div class="acc-item reveal">
           <div class="acc-head">Почему Владивосток называют «воротами России на Восток»?<span class="plus">+</span></div>
-          <div class="acc-body">Это крупнейший порт на Тихом океане и конечная точка Транссибирской магистрали. Через город идут грузы и связи со странами Азиатско-Тихоокеанского региона.</div>
+          <div class="acc-body">Это крупнейший порт на Тихом океане и конечная точка Транссибирской магистрали.</div>
         </div>
         <div class="acc-item reveal">
           <div class="acc-head">Кто такие дальневосточный леопард и амурский тигр?<span class="plus">+</span></div>
-          <div class="acc-body">Это редкие большие кошки, обитающие в Приморье. Дальневосточный леопард — самая редкая большая кошка мира, а амурский тигр — один из самых крупных подвидов тигра.</div>
+          <div class="acc-body">Это редкие большие кошки, обитающие в Приморье. Дальневосточный леопард — самая редкая большая кошка мира.</div>
         </div>
         <div class="acc-item reveal">
           <div class="acc-head">Что такое «Земля леопарда»?<span class="plus">+</span></div>
@@ -427,128 +420,31 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
     </section>
   </div>
 
-  <!-- ============ ROUTE ============ -->
+  <!-- ============ PUTEVIDITEL ============ -->
   <div class="page" id="page-route">
     <section>
       <div class="section-head reveal">
-        <h2>Маршрут «От порта до юга»</h2>
-        <p>Нажмите на мордочку леопарда на карте или на карточку справа. Включите аудиогид — браузер озвучит описание.</p>
+        <h2>🧭 Путеводитель по достопримечательностям</h2>
+        <p>12 мест Приморского края. Отмечайте те, где вы уже были, — каждое добавляет печать.</p>
       </div>
-      <div class="explorer">
-        <div class="map-card reveal">
-          <h3>Карта маршрута</h3>
-          <svg class="map-svg" viewBox="0 0 500 420" role="img" aria-label="Карта Приморского края">
-            <path d="M60,60 C140,40 200,80 260,70 C320,60 360,110 420,100 C450,95 470,130 450,180 C430,230 400,260 380,300 C360,340 300,360 250,380 C200,400 150,380 110,340 C70,300 50,240 60,180 C70,120 40,80 60,60 Z"
-                  fill="rgba(61,220,151,.10)" stroke="rgba(61,220,151,.45)" stroke-width="2"/>
-            <text x="70" y="44" fill="#9fb3d9" font-size="12">Приморский край (схематично)</text>
-            <polyline class="route-line"
-              points="120,140 150,160 180,175 210,190 240,210 270,230 300,250 330,270 355,290 380,310 400,330 420,345"/>
 
-            <g class="pin" data-id="0" tabindex="0" aria-label="Владивосток">
-              <circle class="base" cx="120" cy="140" r="14"/>
-              <path class="ear" d="M109,131 L112,120 L120,128 Z"/>
-              <path class="ear" d="M131,131 L128,120 L120,128 Z"/>
-              <circle class="spot" cx="113" cy="137" r="1.6"/><circle class="spot" cx="127" cy="137" r="1.6"/>
-              <circle class="spot" cx="115" cy="145" r="1.4"/><circle class="spot" cx="125" cy="145" r="1.4"/>
-              <circle class="eye" cx="115" cy="140" r="1.8"/><circle class="eye" cx="125" cy="140" r="1.8"/>
-              <path class="nose" d="M118,144 L122,144 L120,147 Z"/>
-              <path class="whisker" d="M108,143 L114,145 M108,147 L114,147 M132,143 L126,145 M132,147 L126,147"/>
-            </g>
-            <g class="pin" data-id="1" tabindex="0" aria-label="Земля леопарда">
-              <circle class="base" cx="150" cy="160" r="14"/>
-              <path class="ear" d="M139,151 L142,140 L150,148 Z"/><path class="ear" d="M161,151 L158,140 L150,148 Z"/>
-              <circle class="spot" cx="143" cy="157" r="1.6"/><circle class="spot" cx="157" cy="157" r="1.6"/>
-              <circle class="eye" cx="145" cy="160" r="1.8"/><circle class="eye" cx="155" cy="160" r="1.8"/>
-              <path class="nose" d="M148,164 L152,164 L150,167 Z"/>
-              <path class="whisker" d="M138,163 L144,165 M138,167 L144,167 M162,163 L156,165 M162,167 L156,167"/>
-            </g>
-            <g class="pin" data-id="2" tabindex="0" aria-label="Сихотэ-Алинь">
-              <circle class="base" cx="180" cy="175" r="14"/>
-              <path class="ear" d="M169,166 L172,155 L180,163 Z"/><path class="ear" d="M191,166 L188,155 L180,163 Z"/>
-              <circle class="eye" cx="175" cy="175" r="1.8"/><circle class="eye" cx="185" cy="175" r="1.8"/>
-              <path class="nose" d="M178,179 L182,179 L180,182 Z"/>
-              <path class="whisker" d="M168,178 L174,180 M168,182 L174,182 M192,178 L186,180 M192,182 L186,182"/>
-            </g>
-            <g class="pin" data-id="3" tabindex="0" aria-label="Остров Русский">
-              <circle class="base" cx="210" cy="190" r="14"/>
-              <path class="ear" d="M199,181 L202,170 L210,178 Z"/><path class="ear" d="M221,181 L218,170 L210,178 Z"/>
-              <circle class="eye" cx="205" cy="190" r="1.8"/><circle class="eye" cx="215" cy="190" r="1.8"/>
-              <path class="nose" d="M208,194 L212,194 L210,197 Z"/>
-              <path class="whisker" d="M198,193 L204,195 M198,197 L204,197 M222,193 L216,195 M222,197 L216,197"/>
-            </g>
-            <g class="pin" data-id="4" tabindex="0" aria-label="Камчатский краб">
-              <circle class="base" cx="240" cy="210" r="14"/>
-              <path class="ear" d="M229,201 L232,190 L240,198 Z"/><path class="ear" d="M251,201 L248,190 L240,198 Z"/>
-              <circle class="eye" cx="235" cy="210" r="1.8"/><circle class="eye" cx="245" cy="210" r="1.8"/>
-              <path class="nose" d="M238,214 L242,214 L240,217 Z"/>
-              <path class="whisker" d="M228,213 L234,215 M228,217 L234,217 M252,213 L246,215 M252,217 L246,217"/>
-            </g>
-            <g class="pin" data-id="5" tabindex="0" aria-label="Уссурийск">
-              <circle class="base" cx="270" cy="230" r="14"/>
-              <path class="ear" d="M259,221 L262,210 L270,218 Z"/><path class="ear" d="M281,221 L278,210 L270,218 Z"/>
-              <circle class="eye" cx="265" cy="230" r="1.8"/><circle class="eye" cx="275" cy="230" r="1.8"/>
-              <path class="nose" d="M268,234 L272,234 L270,237 Z"/>
-              <path class="whisker" d="M258,233 L264,235 M258,237 L264,237 M282,233 L276,235 M282,237 L276,237"/>
-            </g>
-            <g class="pin" data-id="6" tabindex="0" aria-label="Находка">
-              <circle class="base" cx="300" cy="250" r="14"/>
-              <path class="ear" d="M289,241 L292,230 L300,238 Z"/><path class="ear" d="M311,241 L308,230 L300,238 Z"/>
-              <circle class="eye" cx="295" cy="250" r="1.8"/><circle class="eye" cx="305" cy="250" r="1.8"/>
-              <path class="nose" d="M298,254 L302,254 L300,257 Z"/>
-              <path class="whisker" d="M288,253 L294,255 M288,257 L294,257 M312,253 L306,255 M312,257 L306,257"/>
-            </g>
-            <g class="pin" data-id="7" tabindex="0" aria-label="Мыс Песчаный">
-              <circle class="base" cx="330" cy="270" r="14"/>
-              <path class="ear" d="M319,261 L322,250 L330,258 Z"/><path class="ear" d="M341,261 L338,250 L330,258 Z"/>
-              <circle class="eye" cx="325" cy="270" r="1.8"/><circle class="eye" cx="335" cy="270" r="1.8"/>
-              <path class="nose" d="M328,274 L332,274 L330,277 Z"/>
-              <path class="whisker" d="M318,273 L324,275 M318,277 L324,277 M342,273 L336,275 M342,277 L336,277"/>
-            </g>
-            <g class="pin" data-id="8" tabindex="0" aria-label="Озеро Ханка">
-              <circle class="base" cx="355" cy="290" r="14"/>
-              <path class="ear" d="M344,281 L347,270 L355,278 Z"/><path class="ear" d="M366,281 L363,270 L355,278 Z"/>
-              <circle class="eye" cx="350" cy="290" r="1.8"/><circle class="eye" cx="360" cy="290" r="1.8"/>
-              <path class="nose" d="M353,294 L357,294 L355,297 Z"/>
-              <path class="whisker" d="M343,293 L349,295 M343,297 L349,297 M367,293 L361,295 M367,297 L361,297"/>
-            </g>
-            <g class="pin" data-id="9" tabindex="0" aria-label="Мыс Тобизина">
-              <circle class="base" cx="380" cy="310" r="14"/>
-              <path class="ear" d="M369,301 L372,290 L380,298 Z"/><path class="ear" d="M391,301 L388,290 L380,298 Z"/>
-              <circle class="eye" cx="375" cy="310" r="1.8"/><circle class="eye" cx="385" cy="310" r="1.8"/>
-              <path class="nose" d="M378,314 L382,314 L380,317 Z"/>
-              <path class="whisker" d="M368,313 L374,315 M368,317 L374,317 M392,313 L386,315 M392,317 L386,317"/>
-            </g>
-            <g class="pin" data-id="10" tabindex="0" aria-label="Лазовский заповедник">
-              <circle class="base" cx="400" cy="330" r="14"/>
-              <path class="ear" d="M389,321 L392,310 L400,318 Z"/><path class="ear" d="M411,321 L408,310 L400,318 Z"/>
-              <circle class="eye" cx="395" cy="330" r="1.8"/><circle class="eye" cx="405" cy="330" r="1.8"/>
-              <path class="nose" d="M398,334 L402,334 L400,337 Z"/>
-              <path class="whisker" d="M388,333 L394,335 M388,337 L394,337 M412,333 L406,335 M412,337 L406,337"/>
-            </g>
-            <g class="pin" data-id="11" tabindex="0" aria-label="Мыс Крылова">
-              <circle class="base" cx="420" cy="345" r="14"/>
-              <path class="ear" d="M409,336 L412,325 L420,333 Z"/><path class="ear" d="M431,336 L428,325 L420,333 Z"/>
-              <circle class="eye" cx="415" cy="345" r="1.8"/><circle class="eye" cx="425" cy="345" r="1.8"/>
-              <path class="nose" d="M418,349 L422,349 L420,352 Z"/>
-              <path class="whisker" d="M408,348 L414,350 M408,352 L414,352 M432,348 L426,350 M432,352 L426,352"/>
-            </g>
-          </svg>
-          <div class="legend">
-            <span><i style="background:#e8a84a"></i> остановка-леопард</span>
-            <span><i style="background:var(--gold)"></i> выбрано</span>
-            <span><i style="background:var(--accent2)"></i> линия маршрута</span>
-          </div>
+      <div class="guide-hero reveal">
+        <h2>Мой маршрут путешественника</h2>
+        <p>Отметьте посещённые места — прогресс сохраняется автоматически. Соберите все 12 и получите приз «Золотой леопард».</p>
+        <div class="progress-wrap">
+          <div class="progress-bar"><span id="barFill"></span></div>
+          <div class="progress-num"><span id="visitedCount">0</span> / 12</div>
         </div>
-        <div>
-          <div class="filters reveal">
-            <button class="chip active" data-filter="all">Все</button>
-            <button class="chip" data-filter="city">Города</button>
-            <button class="chip" data-filter="nature">Природа</button>
-            <button class="chip" data-filter="history">История</button>
-            <button class="chip" data-filter="food">Еда</button>
-          </div>
-          <div class="stops" id="stops"></div>
-        </div>
+        <div class="stamps" id="stamps"></div>
+      </div>
+
+      <div class="guide-grid" id="guideGrid"></div>
+
+      <div class="prize-banner" id="prizeBanner">
+        <h3>🏆 Поздравляем! Вы собрали все 12 печатей!</h3>
+        <p>Ваш приз — «Золотой леопард» и уникальный код на бонусную страницу.</p>
+        <p style="font-size:22px;font-weight:900;color:var(--gold);letter-spacing:4px">PRIMORYE-2026</p>
+        <button class="btn btn-gold" onclick="go('bonus')">🎁 Забрать приз</button>
       </div>
     </section>
   </div>
@@ -578,111 +474,39 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
     <section>
       <div class="section-head reveal">
         <h2>Образы Приморья</h2>
-        <p>Замените ссылки на свои файлы в папке <code>img/</code>. Пример: <code>img/vladivostok.jpg</code>.</p>
+        <p>Реальные фотографии края. Наведите на карточку — она увеличится.</p>
       </div>
       <div class="gallery">
         <div class="card-photo reveal">
-          <img src="https://vpf.ru/storage/cache/images/000/968/IMG-20160707-204801,medium_large.1503202825.jpg"
-               alt="Золотой мост" loading="lazy"
+          <img src="https://vpf.ru/storage/cache/images/000/968/IMG-20160707-204801,medium_large.1503202825.jpg" alt="Золотой мост" loading="lazy"
                onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#1f6feb,#0b1220)'">
           <div class="cap">Золотой мост<small>Владивосток</small></div>
         </div>
         <div class="card-photo reveal">
-          <img src=" https://moya-planeta.ru/upload/images/xl/5c/87/5c87d492339cb6feff636504ae568b74c21d2be9.jpg"
-               alt="Амурский тигр" loading="lazy"
+          <img src="https://moya-planeta.ru/upload/images/xl/5c/87/5c87d492339cb6feff636504ae568b74c21d2be9.jpg" alt="Амурский тигр" loading="lazy"
                onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#0f9d6a,#0b1220)'">
           <div class="cap">Амурский тигр<small>Сихотэ-Алинь</small></div>
         </div>
         <div class="card-photo reveal">
-          <img src="https://primamedia.ru/f/original/1279/1278249.jpg?c15bb527b5969ae09eced8db62845642"
-               alt="Русский мост" loading="lazy"
+          <img src="https://primamedia.ru/f/original/1279/1278249.jpg?c15bb527b5969ae09eced8db62845642" alt="Русский мост" loading="lazy"
                onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#c98a00,#3a2a00)'">
           <div class="cap">Русский мост<small>Остров Русский</small></div>
         </div>
         <div class="card-photo reveal">
-          <img src="https://7d9e88a8-f178-4098-bea5-48d960920605.selcdn.net/55094071-4b7a-4359-9897-c7b465261ae8/-/format/webp/-/quality/smart_retina/-/stretch/off/-/resize/900x/"
-               alt="Японское море" loading="lazy"
+          <img src="https://7d9e88a8-f178-4098-bea5-48d960920605.selcdn.net/55094071-4b7a-4359-9897-c7b465261ae8/-/format/webp/-/quality/smart_retina/-/stretch/off/-/resize/900x/" alt="Японское море" loading="lazy"
                onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#4ea1ff,#0b1220)'">
           <div class="cap">Японское море<small>Побережье Приморья</small></div>
         </div>
         <div class="card-photo reveal">
-          <img src="https://cdn.insales-shop.ru/files/1/4244/35795092/original/edp9wudb87ivajc28c77cp8g0reqap2d-1722085130958.png"
-               alt="Камчатский краб" loading="lazy"
+          <img src="https://cdn.insales-shop.ru/files/1/4244/35795092/original/edp9wudb87ivajc28c77cp8g0reqap2d-1722085130958.png" alt="Камчатский краб" loading="lazy"
                onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#ff6b6b,#3a0f0f)'">
           <div class="cap">Камчатский краб<small>Символ Приморья</small></div>
         </div>
         <div class="card-photo reveal">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROCUIVtLAdOvmtvtDfVAbEQ9pjyskgoyvcRsUb3N8n5g&s=10"
-               alt="Лотосы на Ханке" loading="lazy"
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROCUIVtLAdOvmtvtDfVAbEQ9pjyskgoyvcRsUb3N8n5g&s=10" alt="Лотосы на Ханке" loading="lazy"
                onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#8e7dff,#1a1440)'">
           <div class="cap">Лотосы<small>Озеро Ханка</small></div>
         </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-head reveal">
-        <h2>До / После: Владивосток</h2>
-        <p>Потяните ползунок, чтобы сравнить два вида города.</p>
-      </div>
-      <div class="slider" id="slider">
-        <img class="before" src="https://architectureguru.ru/wp-content/uploads/2015/07/468458281.jpg"
-             alt="Владивосток днём"
-             onerror="this.onerror=null;this.removeAttribute('src');this.style.background='linear-gradient(135deg,#1f6feb,#0b1220)'">
-        <img class="after" src="https://rus.team/images/article/43863/2018-12-20-218_75222-2_115675.webp"
-             alt="Русский мост"
-             onerror="this.onerror=null;this.removeAttribute('src');this.style.background='linear-gradient(135deg,#c98a00,#3a2a00)'">
-        <div class="handle"></div>
-        <div class="tagl">Золотой мост</div>
-        <div class="tagr">Русский мост</div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ============ GAME ============ -->
-  <div class="page" id="page-game">
-    <section>
-      <div class="section-head reveal">
-        <h2>Мини-игра «Собери маршрут»</h2>
-        <p>Перетащите остановки в правильном порядке — от Владивостока до мыса Крылова. Соберите все 8 и получите код приза.</p>
-      </div>
-      <div class="game reveal">
-        <div class="game-top">
-          <div class="score-box">Очки: <span id="score">0</span> / 8</div>
-          <button class="btn btn-ghost" id="resetGame">🔄 Заново</button>
-        </div>
-        <div class="game-zone">
-          <div>
-            <h4 style="margin-top:0">Доступные остановки</h4>
-            <div class="pool" id="pool"></div>
-          </div>
-          <div>
-            <h4 style="margin-top:0">Правильный порядок</h4>
-            <div class="slot-zone" id="slots"></div>
-          </div>
-        </div>
-        <div class="win-box" id="winBox">
-          <h3 style="margin-top:0">🎉 Победа! Вы собрали маршрут!</h3>
-          <p>Ваш приз — секретный факт о Приморье и код на бонусную страницу:</p>
-          <p style="font-size:20px;font-weight:800;color:var(--gold);letter-spacing:4px">PRIMORYE-2026</p>
-          <button class="btn btn-pink" onclick="go('bonus')">Перейти к бонусу →</button>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ============ QUIZ ============ -->
-  <div class="page" id="page-quiz">
-    <section>
-      <div class="section-head reveal">
-        <h2>Викторина «Знаете ли вы Приморье?»</h2>
-        <p>5 вопросов. Проверьте себя!</p>
-      </div>
-      <div class="quiz reveal" id="quizBox">
-        <div class="quiz-progress" id="quizProgress"></div>
-        <div class="quiz-q" id="quizQ"></div>
-        <div class="quiz-opts" id="quizOpts"></div>
-        <div class="quiz-result" id="quizResult" style="display:none"></div>
       </div>
     </section>
   </div>
@@ -691,16 +515,25 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
   <div class="page" id="page-bonus">
     <section>
       <div class="section-head reveal">
-        <h2>🎁 Бонусная страница</h2>
-        <p>Введите код из мини-игры, чтобы открыть пасхалку — рецепт и секретный факт.</p>
+        <h2>🎁 Приз за прохождение маршрута</h2>
+        <p>Получите код после отметки всех 12 достопримечательностей в путеводителе. Или введите его вручную ниже.</p>
       </div>
       <div class="recipe reveal" style="text-align:center">
+        <div class="medal"></div>
+        <h3>Золотой леопард</h3>
         <input id="bonusCode" placeholder="Введите код..."
                style="padding:12px 16px;border-radius:12px;border:1px solid var(--accent);background:var(--card2);color:var(--text);font-size:16px;text-align:center;letter-spacing:2px;text-transform:uppercase;max-width:280px;width:100%">
         <button class="btn btn-primary" style="margin-left:10px" onclick="checkBonus()">Открыть</button>
         <p id="bonusMsg" style="margin-top:14px;color:var(--muted)"></p>
       </div>
       <div class="recipe reveal" id="bonusContent" style="display:none;margin-top:20px">
+        <h3>🗺 Готовый маршрут на 3 дня</h3>
+        <ol>
+          <li><strong>День 1 — Владивосток:</strong> Золотой мост, набережная, мыс Тобизина, ужин из краба.</li>
+          <li><strong>День 2 — Юг Приморья:</strong> Земля леопарда, мыс Песчаный, мыс Крылова.</li>
+          <li><strong>День 3 — Природа:</strong> Сихотэ-Алинь, Лазовский заповедник или озеро Ханка — на выбор.</li>
+        </ol>
+        <hr style="border-color:color-mix(in srgb,var(--text) 15%, transparent);margin:18px 0">
         <h3>🥗 «Владивостокский морской салат»</h3>
         <ol>
           <li>Отварите камчатского краба или креветки (300 г), остудите.</li>
@@ -709,8 +542,10 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
           <li>Заправьте: соевый соус, кунжутное масло, сок лайма, чуть чили.</li>
           <li>Посыпьте кунжутом и подавайте с видом на Японское море.</li>
         </ol>
-        <hr style="border-color:color-mix(in srgb,var(--text) 15%, transparent);margin:18px 0">
         <p><strong>Секретный факт:</strong> в Приморье произрастает более 2 000 видов растений, а в Японском море обитает около 800 видов рыб.</p>
+        <div style="text-align:center;margin-top:16px">
+          <button class="btn btn-ghost" onclick="resetTrip()">🔄 Сбросить маршрут</button>
+        </div>
       </div>
     </section>
   </div>
@@ -719,67 +554,67 @@ footer{padding:36px 0;border-top:1px solid color-mix(in srgb,var(--text) 10%, tr
 
 <footer>
   <div class="wrap footer-grid">
-    <div>© 2026 · Учебный проект «Приморье: Край у Океана». Сделано для GitHub Pages.</div>
-    <div>Фото можно заменить на свои в папке <code>img/</code>.</div>
+    <div>© 2026 · Учебный проект «Приморье: Край у Океана».</div>
+    <div>Фотографии — открытые источники.</div>
   </div>
 </footer>
 
-<div id="toast">Аудиогид включён</div>
+<div id="toast">Готово</div>
 
 <script>
-/* ===== DATA ===== */
+/* ============ DATA ============ */
 const STOPS = [
   {emoji:"🌉",title:"Владивосток",place:"Город-порт, столица края",tags:["city","history","food"],
    desc:"Крупнейший порт России на Тихом океане и конечная точка Транссиба. Мосты через бухту Золотой Рог, сопки, маяки, набережная и морепродукты.",
-   audio:"Владивосток. Город-порт на берегу Японского моря, конечная точка Транссибирской магистрали. Основан в 1860 году как военный пост.",
+   audio:"Владивосток. Город-порт на берегу Японского моря, конечная точка Транссибирской магистрали.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBJrx5xfcD3Ero6Kcn345LFqSaV78PHwvcG-IeorkeWQ&s=10",
    site:"https://visit-primorye.ru/news/chto-posmotret-vo-vladivostoke-dostoprimechatelnosti",
    eat:"https://restaurantguru.ru/Kupol-Vladivostok"},
-  {emoji:"🐅",title:"Национальный парк «Земля леопарда»",place:"Хасанский район",tags:["nature"],
-   desc:"Дом дальневосточного леопарда — самой редкой большой кошки планеты. Здесь же обитает амурский тигр.",
-   audio:"Земля леопарда — национальный парк в Приморье, где живёт дальневосточный леопард, самая редкая большая кошка мира.",
+  {emoji:"🐅",title:"Земля леопарда",place:"Хасанский район",tags:["nature"],
+   desc:"Национальный парк, где живёт дальневосточный леопард — самая редкая большая кошка планеты. Здесь же обитает амурский тигр.",
+   audio:"Земля леопарда — национальный парк в Приморье, где живёт дальневосточный леопард.",
    photo:"https://2spalnika.ru/wp-content/uploads/2023/08/zemlya-leoparda.png",
    site:"https://leopard-land.ru/territory/national-park",
    eat:"https://2gis.ru/search/Андреевка%20еда"},
   {emoji:"⛰️",title:"Сихотэ-Алинь",place:"Горная система",tags:["nature"],
    desc:"Крупнейшая горная страна края, объект Всемирного наследия ЮНЕСКО. Тайга, кедр, реликтовые растения.",
-   audio:"Сихотэ-Алинь — горная система в Приморье и Хабаровском крае, объект Всемирного наследия ЮНЕСКО.",
+   audio:"Сихотэ-Алинь — горная система в Приморье, объект Всемирного наследия ЮНЕСКО.",
    photo:"https://visit-primorye.ru/_next/image?url=https%3A%2F%2Fvisit-primorye.ru%2Fuploads%2Fmedium_Sihote_Alinskij_zapovednik9_48a7c48603.webp&w=1920&q=75",
    site:"https://visit-primorye.ru",
    eat:"https://restaurantguru.ru/Che-Po-Myasu-Ussuriysk"},
   {emoji:"🏝️",title:"Остров Русский",place:"Владивосток",tags:["city","history","nature"],
    desc:"Крупный остров с фортами, маяками, кампусом ДВФУ и мостом. Место саммита АТЭС-2012.",
-   audio:"Остров Русский — крупный остров рядом с Владивостоком. Здесь находятся форты, маяки и кампус ДВФУ.",
+   audio:"Остров Русский — крупный остров рядом с Владивостоком с фортами и маяками.",
    photo:"https://visit-primorye.ru/uploads/medium_Ostrov_Russkij_Darya_Agafonova_46a9586a95.jpg",
    site:"https://visit-primorye.ru/news/vladivostok-samostoyatelno-za-1-2-dnya",
    eat:"https://restaurantguru.ru/Kupol-Vladivostok"},
   {emoji:"🦀",title:"Камчатский краб",place:"Приморье",tags:["food","nature"],
    desc:"Один из символов края. Деликатес и важная часть экономики региона.",
-   audio:"Камчатский краб — символ Приморья и деликатес. Его промысел — важная часть экономики региона.",
+   audio:"Камчатский краб — символ Приморья и деликатес.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWHuRB2Vzjp7ZXF4eQsRQ9pJ69cXHI7f-WC3xhkrdzj8uQNvNyjZtvh_w&s=10",
    site:"https://visit-primorye.ru",
    eat:"https://restaurantguru.ru/Kupol-Vladivostok"},
   {emoji:"🏰",title:"Уссурийск",place:"Город",tags:["city","history"],
    desc:"Один из старейших городов Приморья. Основан в 1866 году.",
-   audio:"Уссурийск — один из старейших городов Приморского края, основан в 1866 году.",
+   audio:"Уссурийск — один из старейших городов Приморского края.",
    photo:"https://avatars.mds.yandex.net/get-altay/14234746/2a000001957da5d38ca0bc776d668a8b6502/L_height",
    site:"https://visit-primorye.ru",
    eat:"https://restaurantguru.ru/Che-Po-Myasu-Ussuriysk"},
   {emoji:"⚓",title:"Находка",place:"Порт и город",tags:["city","history"],
    desc:"Крупный портовый город на берегу бухты Находка.",
-   audio:"Находка — портовый город на юге Приморья, один из крупнейших портов Дальнего Востока России.",
+   audio:"Находка — портовый город на юге Приморья.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRQZycP_gKRzGzLLxyc9vuNxV2XGN0n6-qK9gVpLyXrw&s=10",
    site:"https://visit-primorye.ru",
    eat:"https://restaurantguru.ru/Elmira-Nakhodka"},
   {emoji:"🌋",title:"Мыс Песчаный",place:"Хасанский район",tags:["nature"],
    desc:"Живописный мыс с видами на Японское море и острова.",
-   audio:"Мыс Песчаный — живописное место в Хасанском районе Приморья.",
+   audio:"Мыс Песчаный — живописное место в Хасанском районе.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3i0TNponkwp3A-HKLRwmVlKf4NNjIH5w0y6Ck5UNHgtX5uvN9-Fh-cM&s=10",
    site:"https://visit-primorye.ru",
    eat:"https://2gis.ru/search/Андреевка%20еда"},
   {emoji:"🏞️",title:"Озеро Ханка",place:"Запад края",tags:["nature"],
    desc:"Крупнейшее озеро Дальнего Востока. Рамсарское угодье, дом для редких птиц и лотосов.",
-   audio:"Озеро Ханка — крупнейшее озеро Дальнего Востока. Рамсарское угодье.",
+   audio:"Озеро Ханка — крупнейшее озеро Дальнего Востока.",
    photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLcOPPxv7amd_nM5Ik83IRPTSL2ZtypNy7F5Q0QjE5qw&s=10",
    site:"https://visit-primorye.ru",
    eat:"https://restaurantguru.ru/Che-Po-Myasu-Ussuriysk"},
@@ -797,101 +632,121 @@ const STOPS = [
    eat:"https://travel.yandex.ru/hotels/primorsky-krai/bukhta-petrova/reviews/"},
   {emoji:"🌅",title:"Мыс Крылова",place:"Хасанский район",tags:["nature"],
    desc:"Самая южная точка России. Здесь заканчивается земля и начинается Японское море.",
-   audio:"Мыс Крылова — самая южная точка России. Здесь встречаются Японское море и суша.",
+   audio:"Мыс Крылова — самая южная точка России.",
    photo:"https://offroad.kholmsk.ru/images/Туризм/Мыс_Крильон/11.jpg",
    site:"https://visit-primorye.ru",
    eat:"https://2gis.ru/search/Андреевка%20еда"}
 ];
 
-/* ===== NAV ===== */
+/* ============ NAV ============ */
 function go(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   document.querySelectorAll('#navLinks button').forEach(b=>b.classList.toggle('active', b.dataset.page===page));
   window.scrollTo({top:0,behavior:'smooth'});
   setTimeout(observeReveal, 80);
-  if(page==='quiz' && !quizStarted) startQuiz();
-  if(page==='game' && !gameStarted) initGame();
 }
 document.querySelectorAll('#navLinks button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
 document.querySelector('.logo').addEventListener('click',()=>go('home'));
 
-/* ===== STOPS ===== */
-const stopsEl=document.getElementById('stops');
-function renderStops(filter='all'){
-  stopsEl.innerHTML='';
+/* ============ VISITED STATE ============ */
+const VISITED_KEY='primorye_visited_v1';
+let visited = new Set(JSON.parse(localStorage.getItem(VISITED_KEY)||'[]'));
+
+function saveVisited(){
+  localStorage.setItem(VISITED_KEY, JSON.stringify([...visited]));
+}
+
+function renderStamps(){
+  const el=document.getElementById('stamps');
+  el.innerHTML = STOPS.map((s,i)=>{
+    const v = visited.has(i);
+    return `<div class="stamp ${v?'earned':''}" title="${s.title}">${v?s.emoji:'?'}</div>`;
+  }).join('');
+}
+
+function updateProgress(){
+  const total=STOPS.length;
+  const done=visited.size;
+  document.getElementById('visitedCount').textContent=done;
+  const pct=Math.round(done/total*100);
+  document.getElementById('barFill').style.width=pct+'%';
+  const banner=document.getElementById('prizeBanner');
+  if(done===total){
+    if(!banner.classList.contains('show')){
+      banner.classList.add('show');
+      playWin();fireConfetti();
+      toast('🏆 Вы собрали все 12 печатей! Приз открыт.');
+    }
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+function toggleVisit(i){
+  if(visited.has(i)){ visited.delete(i); playBeep(320,.1,.05); toast('Снята отметка: '+STOPS[i].title); }
+  else{ visited.add(i); playBeep(880,.15,.08,'triangle'); toast('✅ Отмечено: '+STOPS[i].title); }
+  saveVisited();
+  renderGuide();
+}
+
+function resetTrip(){
+  visited.clear(); saveVisited(); renderGuide(); renderStamps(); updateProgress();
+  toast('Маршрут сброшен');
+  document.getElementById('bonusContent').style.display='none';
+  document.getElementById('bonusMsg').textContent='';
+}
+
+/* ============ GUIDE GRID ============ */
+function renderGuide(){
+  const grid=document.getElementById('guideGrid');
+  grid.innerHTML='';
   STOPS.forEach((s,i)=>{
-    if(filter!=='all' && !s.tags.includes(filter)) return;
+    const isV=visited.has(i);
     const el=document.createElement('div');
-    el.className='stop reveal';el.dataset.id=i;
+    el.className='place reveal'+(isV?' visited':'');
     el.innerHTML=`
-      <div class="emoji">${s.emoji}</div>
-      <div>
-        <h4>${i+1}. ${s.title}</h4>
-        <div class="meta">${s.place}</div>
-        <div class="desc">${s.desc}
-          <div class="stop-photo">
-            <img src="${s.photo}" alt="${s.title}" loading="lazy"
-                 onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#1f6feb,#0b1220)'">
-          </div>
-          <div class="stop-links">
-            <a href="${s.site}" target="_blank" rel="noopener">🔗 Подробнее о достопримечательности</a>
-            <a href="${s.eat}" target="_blank" rel="noopener">🍽 Где рядом поесть</a>
-          </div>
-          <div class="actions">
-            <button class="mini" data-audio="${i}">🔊 Аудиогид</button>
-            <button class="mini" data-copy="${i}">📋 Скопировать</button>
-          </div>
+      <div class="place-img">
+        <img src="${s.photo}" alt="${s.title}" loading="lazy"
+             onerror="this.onerror=null;this.removeAttribute('src');this.parentElement.style.background='linear-gradient(135deg,#1f6feb,#0b1220)'">
+        <div class="num">${i+1} / ${STOPS.length}</div>
+        <div class="emoji-tag">${s.emoji}</div>
+        <div class="visited-badge">✓ Посещено</div>
+      </div>
+      <div class="place-body">
+        <h3>${s.title}</h3>
+        <div class="meta">📍 ${s.place}</div>
+        <div class="desc">${s.desc}</div>
+        <div class="tags">${s.tags.map(t=>`<span class="tag" style="display:inline-block;font-size:11px;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--gold) 22%, transparent);color:var(--gold);margin-right:6px">${tagName(t)}</span>`).join('')}</div>
+        <div class="links">
+          <a href="${s.site}" target="_blank" rel="noopener">🔗 Подробнее о достопримечательности</a>
+          <a href="${s.eat}" target="_blank" rel="noopener">🍽 Где рядом поесть</a>
         </div>
-        <div>${s.tags.map(t=>`<span class="tag">${tagName(t)}</span>`).join('')}</div>
+        <div class="place-actions">
+          <button class="btn-visit ${isV?'done':''}" data-visit="${i}">
+            ${isV?'✓ В маршруте': '+ Отметить посещённым'}
+          </button>
+          <button class="btn-mini-ghost" data-audio="${i}">🔊 Аудиогид</button>
+        </div>
       </div>`;
-    el.addEventListener('click',e=>{if(e.target.tagName==='BUTTON'||e.target.tagName==='A')return;selectStop(i);});
-    stopsEl.appendChild(el);
+    grid.appendChild(el);
   });
+  renderStamps();
+  updateProgress();
   observeReveal();
 }
+
 function tagName(t){return {city:'город',nature:'природа',history:'история',food:'еда'}[t]||t;}
-let current=null;
-function selectStop(i){
-  current=i;
-  document.querySelectorAll('.stop').forEach(el=>el.classList.toggle('active',+el.dataset.id===i));
-  document.querySelectorAll('.pin').forEach(p=>p.classList.toggle('active',+p.dataset.id===i));
-  const el=document.querySelector(`.stop[data-id="${i}"]`);
-  if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
-  playBeep(660,.06,.04);
-}
-function speak(text){
-  if(!('speechSynthesis' in window)){toast('Браузер не поддерживает аудио');return;}
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='ru-RU';u.rate=.95;u.pitch=1.05;
-  const v=window.speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith('ru'));
-  if(v)u.voice=v;
-  window.speechSynthesis.speak(u);
-  toast('🔊 Аудиогид: '+text.slice(0,40)+'…');
-}
-stopsEl.addEventListener('click',e=>{
+
+/* делегирование кликов */
+document.getElementById('guideGrid').addEventListener('click',e=>{
+  const v=e.target.closest('[data-visit]');
+  if(v){ toggleVisit(+v.dataset.visit); return; }
   const a=e.target.closest('[data-audio]');
-  if(a){speak(STOPS[+a.dataset.audio].audio);return;}
-  const c=e.target.closest('[data-copy]');
-  if(c){
-    const s=STOPS[+c.dataset.copy];
-    navigator.clipboard.writeText(`${s.title}\n${s.place}\n\n${s.desc}`)
-      .then(()=>toast('📋 Текст скопирован')).catch(()=>toast('Не удалось скопировать'));
-  }
-});
-document.querySelectorAll('.pin').forEach(p=>{
-  p.addEventListener('click',()=>selectStop(+p.dataset.id));
-  p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')selectStop(+p.dataset.id);});
-});
-document.querySelectorAll('.chip').forEach(ch=>{
-  ch.addEventListener('click',()=>{
-    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-    ch.classList.add('active');renderStops(ch.dataset.filter);
-  });
+  if(a){ speak(STOPS[+a.dataset.audio].audio); return; }
 });
 
-/* ===== SOUND ===== */
+/* ============ SOUND ============ */
 let audioCtx;
 function ensureAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
 function playBeep(freq,dur,vol=.08,type='sine'){
@@ -905,14 +760,25 @@ function playBeep(freq,dur,vol=.08,type='sine'){
 }
 function playWin(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playBeep(f,.18,.1,'triangle'),i*120));}
 
-/* ===== THEME ===== */
+function speak(text){
+  if(!('speechSynthesis' in window)){toast('Браузер не поддерживает аудио');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ru-RU';u.rate=.95;u.pitch=1.05;
+  const v=window.speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith('ru'));
+  if(v)u.voice=v;
+  window.speechSynthesis.speak(u);
+  toast('🔊 Аудиогид');
+}
+
+/* ============ THEME ============ */
 const themeBtn=document.getElementById('themeBtn');
 themeBtn.addEventListener('click',()=>{
   document.body.classList.toggle('light');
   themeBtn.textContent=document.body.classList.contains('light')?'☀️ Тема':'🌙 Тема';
 });
 
-/* ===== PROGRESS + PARALLAX ===== */
+/* ============ SCROLL PROGRESS + PARALLAX ============ */
 window.addEventListener('scroll',()=>{
   const h=document.documentElement;
   document.getElementById('progress').style.width=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100+'%';
@@ -923,7 +789,7 @@ window.addEventListener('scroll',()=>{
   }
 });
 
-/* ===== COUNT + REVEAL ===== */
+/* ============ COUNT + REVEAL ============ */
 function animateCount(el){
   const t=+el.dataset.count,d=1200,s=performance.now();
   (function tick(now){
@@ -947,15 +813,10 @@ function observeReveal(){
   document.querySelectorAll('.reveal:not(.show)').forEach(el=>observer.observe(el));
 }
 document.querySelectorAll('.fact').forEach(f=>{
-  f.addEventListener('mousemove',e=>{
-    const r=f.getBoundingClientRect();
-    f.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-    f.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-  });
   f.addEventListener('click',()=>{if(f.dataset.tip)toast('💡 '+f.dataset.tip);playBeep(880,.08,.05);});
 });
 
-/* ===== ACCORDION ===== */
+/* ============ ACCORDION ============ */
 document.querySelectorAll('.acc-head').forEach(h=>{
   h.addEventListener('click',()=>{
     const it=h.parentElement;it.classList.toggle('open');
@@ -963,146 +824,31 @@ document.querySelectorAll('.acc-head').forEach(h=>{
   });
 });
 
-/* ===== SLIDER ===== */
-(function(){
-  const sl=document.getElementById('slider');if(!sl)return;
-  let dragging=false;
-  function move(x){
-    const r=sl.getBoundingClientRect();
-    let p=Math.max(0,Math.min(100,(x-r.left)/r.width*100));
-    sl.querySelector('.after').style.clipPath=`inset(0 0 0 ${p}%)`;
-    sl.querySelector('.handle').style.left=p+'%';
-  }
-  sl.addEventListener('mousedown',e=>{dragging=true;move(e.clientX);});
-  window.addEventListener('mousemove',e=>{if(dragging)move(e.clientX);});
-  window.addEventListener('mouseup',()=>dragging=false);
-  sl.addEventListener('touchstart',e=>{dragging=true;move(e.touches[0].clientX);},{passive:true});
-  sl.addEventListener('touchmove',e=>{if(dragging)move(e.touches[0].clientX);},{passive:true});
-  sl.addEventListener('touchend',()=>dragging=false);
-  sl.addEventListener('click',e=>move(e.clientX));
-})();
-
-/* ===== GAME ===== */
-const GAME_ORDER=[
-  {id:0,ico:"🌉",label:"Владивосток"},
-  {id:3,ico:"🏝️",label:"Остров Русский"},
-  {id:9,ico:"⛩️",label:"Мыс Тобизина"},
-  {id:5,ico:"🏰",label:"Уссурийск"},
-  {id:6,ico:"⚓",label:"Находка"},
-  {id:7,ico:"🌋",label:"Мыс Песчаный"},
-  {id:10,ico:"🌲",label:"Лазовский заповедник"},
-  {id:11,ico:"🌅",label:"Мыс Крылова"}
-];
-let gameStarted=false,score=0;
-function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);}
-function initGame(){
-  gameStarted=true;score=0;
-  document.getElementById('score').textContent='0';
-  document.getElementById('winBox').classList.remove('show');
-  const pool=document.getElementById('pool'),slots=document.getElementById('slots');
-  pool.innerHTML='';slots.innerHTML='';
-  shuffle([...GAME_ORDER]).forEach(item=>{
-    const el=document.createElement('div');
-    el.className='drag-item';el.draggable=true;el.dataset.id=item.id;
-    el.innerHTML=`<span class="ico">${item.ico}</span>${item.label}`;
-    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',item.id);el.classList.add('dragging');});
-    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-    pool.appendChild(el);
-  });
-  GAME_ORDER.forEach((item,idx)=>{
-    const slot=document.createElement('div');
-    slot.className='drop-slot';slot.dataset.index=idx;slot.dataset.answer=item.id;
-    slot.innerHTML=`<div class="num">${idx+1}</div><div class="slot-content" style="color:var(--muted);font-size:14px">Перетащите сюда</div>`;
-    slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('over');});
-    slot.addEventListener('dragleave',()=>slot.classList.remove('over'));
-    slot.addEventListener('drop',e=>{e.preventDefault();slot.classList.remove('over');handleDrop(slot,+e.dataTransfer.getData('text/plain'));});
-    slots.appendChild(slot);
-  });
-}
-function handleDrop(slot,id){
-  const item=GAME_ORDER.find(g=>g.id===id);if(!item)return;
-  slot.querySelector('.slot-content').innerHTML=`<span class="ico">${item.ico}</span> ${item.label}`;
-  slot.querySelector('.slot-content').style.color='var(--text)';
-  slot.classList.add('filled');
-  if(+slot.dataset.answer===id){
-    slot.classList.add('ok');slot.classList.remove('bad');
-    score++;playBeep(880,.12,.08,'triangle');
-    document.querySelector(`.drag-item[data-id="${id}"]`)?.remove();
-  }else{
-    slot.classList.add('bad');slot.classList.remove('ok');
-    playBeep(220,.18,.08,'sawtooth');toast('❌ Не та остановка. Попробуйте ещё!');
-  }
-  document.getElementById('score').textContent=score;
-  if(score===GAME_ORDER.length){
-    document.getElementById('winBox').classList.add('show');
-    playWin();fireConfetti();
-  }
-}
-document.getElementById('resetGame').addEventListener('click',initGame);
-document.getElementById('pool').addEventListener('dragover',e=>e.preventDefault());
-
-/* ===== QUIZ ===== */
-const QUIZ=[
-  {q:"Какое море омывает Приморский край?",opts:["Чёрное","Японское","Балтийское","Охотское"],a:1},
-  {q:"Какая точка России самая южная и находится в Приморье?",opts:["Мыс Дежнёва","Мыс Челюскин","Мыс Крылова","Мыс Тобизина"],a:2},
-  {q:"Какой город — конечная точка Транссибирской магистрали?",opts:["Хабаровск","Владивосток","Находка","Уссурийск"],a:1},
-  {q:"Какая редкая кошка обитает в Приморье?",opts:["Снежный барс","Дальневосточный леопард","Манул","Рысь"],a:1},
-  {q:"Крупнейшее озеро Дальнего Востока в Приморье — это…",opts:["Ханка","Байкал","Телецкое","Ладожское"],a:0}
-];
-let quizStarted=false,qIndex=0,qScore=0;
-function startQuiz(){quizStarted=true;qIndex=0;qScore=0;renderQuiz();}
-function renderQuiz(){
-  document.getElementById('quizProgress').innerHTML=QUIZ.map((_,i)=>`<i class="${i<qIndex?'done':''}"></i>`).join('');
-  const q=QUIZ[qIndex];
-  document.getElementById('quizQ').textContent=`${qIndex+1}. ${q.q}`;
-  const opts=document.getElementById('quizOpts');opts.innerHTML='';
-  document.getElementById('quizResult').style.display='none';
-  q.opts.forEach((o,i)=>{
-    const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
-    b.addEventListener('click',()=>{
-      document.querySelectorAll('.quiz-opt').forEach(x=>x.disabled=true);
-      if(i===q.a){b.classList.add('right');qScore++;playBeep(880,.15,.08,'triangle');}
-      else{b.classList.add('wrong');opts.children[q.a].classList.add('right');playBeep(220,.2,.08,'sawtooth');}
-      setTimeout(()=>{qIndex++;qIndex<QUIZ.length?renderQuiz():showQuizResult();},900);
-    });
-    opts.appendChild(b);
-  });
-}
-function showQuizResult(){
-  document.getElementById('quizProgress').innerHTML=QUIZ.map(()=>'<i class="done"></i>').join('');
-  document.getElementById('quizQ').textContent='';
-  document.getElementById('quizOpts').innerHTML='';
-  const res=document.getElementById('quizResult');res.style.display='block';
-  let msg=qScore===5?'🏆 Идеально! Вы настоящий знаток Приморья!':qScore>=3?'👍 Хороший результат!':'📚 Стоит ещё почитать путеводитель.';
-  if(qScore===5){fireConfetti();playWin();}
-  res.innerHTML=`<strong>${msg}</strong><br>Правильных ответов: ${qScore} из 5<br><br>
-    <button class="btn btn-primary" onclick="quizStarted=false;go('home')">Вернуться на главную</button>`;
-}
-
-/* ===== BONUS ===== */
+/* ============ BONUS ============ */
 function checkBonus(){
   const v=document.getElementById('bonusCode').value.trim().toUpperCase();
   const msg=document.getElementById('bonusMsg');
   if(v==='PRIMORYE-2026'){
-    msg.textContent='✅ Код верный! Пасхалка открыта.';
+    msg.textContent='✅ Код верный! Приз открыт.';
     msg.style.color='var(--accent)';
     document.getElementById('bonusContent').style.display='block';
     fireConfetti();playWin();
+    document.getElementById('bonusContent').scrollIntoView({behavior:'smooth',block:'start'});
   }else{
-    msg.textContent='❌ Неверный код. Подсказка: он выдаётся за победу в мини-игре.';
+    msg.textContent='❌ Неверный код. Подсказка: он выдаётся за все 12 отметок в путеводителе.';
     msg.style.color='var(--danger)';
     playBeep(220,.2,.08,'sawtooth');
   }
 }
 
-/* ===== CONFETTI ===== */
+/* ============ CONFETTI ============ */
 const cc=document.getElementById('confetti'),cx=cc.getContext('2d');
 let pieces=[];
 function resizeCC(){cc.width=innerWidth;cc.height=innerHeight;}
 resizeCC();window.addEventListener('resize',resizeCC);
 function fireConfetti(){
   const colors=['#3ddc97','#4ea1ff','#ffd166','#ff6bcb','#ff6b6b'];
-  for(let i=0;i<140;i++)pieces.push({
+  for(let i=0;i<160;i++)pieces.push({
     x:Math.random()*cc.width,y:-20-Math.random()*200,
     vx:(Math.random()-.5)*4,vy:2+Math.random()*4,
     size:6+Math.random()*8,color:colors[Math.floor(Math.random()*colors.length)],
@@ -1121,7 +867,7 @@ function fireConfetti(){
   requestAnimationFrame(loop);
 })();
 
-/* ===== TOAST ===== */
+/* ============ TOAST ============ */
 let toastTimer;
 function toast(msg){
   const t=document.getElementById('toast');
@@ -1130,8 +876,8 @@ function toast(msg){
   toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-/* ===== INIT ===== */
-renderStops();
+/* ============ INIT ============ */
+renderGuide();
 observeReveal();
 window.speechSynthesis?.getVoices();
 </script>

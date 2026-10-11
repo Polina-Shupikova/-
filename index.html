@@ -1,68 +1,582 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Приморье: Край у Океана — путеводитель по достопримечательностям</title>
-<meta name="description" content="Интерактивный путеводитель по достопримечательностям Приморского края: фото, чек-лист посещений, аудиогид, приз за полный маршрут.">
-<style>
-:root{
-  --bg:#08101f; --bg2:#0d1a31; --card:#132241; --card2:#1a2e57;
-  --text:#eaf1ff; --muted:#9fb3d9; --accent:#3ddc97; --accent2:#4ea1ff;
-  --gold:#ffd166; --pink:#ff6bcb; --danger:#ff6b6b;
-  --shadow:0 18px 40px rgba(0,0,0,.4); --radius:20px;
-}
-body.light{
-  --bg:#f4f7ff; --bg2:#e6eeff; --card:#ffffff; --card2:#eef4ff;
-  --text:#0d1b33; --muted:#4a5b7a; --accent:#0f9d6a; --accent2:#1f6feb;
-  --gold:#c98a00; --pink:#c2189a; --danger:#d63b3b;
-  --shadow:0 18px 40px rgba(20,40,90,.12);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(78,161,255,.20), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(61,220,151,.18), transparent 60%),
-    radial-gradient(800px 500px at 50% 120%, rgba(255,107,203,.14), transparent 60%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-  color:var(--text);line-height:1.6;min-height:100vh;
-  transition:background .4s,color .4s;overflow-x:hidden;
-}
-a{color:var(--accent2);text-decoration:none}
-a:hover{text-decoration:underline}
-img{max-width:100%;display:block}
-.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивный путеводитель | Проектное задание</title>
+    <!-- Подключение карт Leaflet (для интерактивной карты) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        /* --- Общие стили --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-#progress{position:fixed;top:0;left:0;height:4px;width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--pink),var(--gold));
-  z-index:9999;transition:width .15s ease-out;}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
 
-header{position:sticky;top:0;z-index:1000;backdrop-filter:blur(14px);
-  background:color-mix(in srgb,var(--bg) 70%, transparent);
-  border-bottom:1px solid color-mix(in srgb,var(--text) 12%, transparent);}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;flex-wrap:wrap;}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px;cursor:pointer}
-.logo .dot{width:34px;height:34px;border-radius:50%;
-  background:conic-gradient(from 210deg,var(--accent),var(--accent2),var(--pink),var(--gold),var(--accent));
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--bg) 70%, transparent);}
-.nav-links{display:flex;gap:6px;flex-wrap:wrap}
-.nav-links button{background:transparent;color:var(--text);border:1px solid transparent;
-  padding:8px 14px;border-radius:999px;font-size:14px;cursor:pointer;transition:all .2s;font-family:inherit;}
-.nav-links button:hover{background:color-mix(in srgb,var(--accent2) 18%, transparent);border-color:color-mix(in srgb,var(--accent2) 40%, transparent)}
-.nav-links button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04121f;font-weight:700}
-.theme-btn{background:var(--card);color:var(--text);border:1px solid color-mix(in srgb,var(--text) 18%, transparent);
-  padding:8px 12px;border-radius:999px;cursor:pointer;font-size:14px;}
-.theme-btn:hover{border-color:var(--accent)}
+        /* --- Шапка --- */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
 
-.page{display:none;animation:fadeIn .5s ease}
-.page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
 
-.hero{position:relative;padding:70px 0 30px}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
-.badge{display:inline-block;padding:6px 14px;border-radius:999px;font-size:13px;
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- Навигация --- */
+        nav {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1e3c72;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #1e3c72;
+            color: white;
+        }
+
+        /* --- Контейнер --- */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* --- Секция с картой --- */
+        .map-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .map-section h2 {
+            color: #1e3c72;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #2a5298;
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        /* --- Сетка карточек --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #ddd; /* Заглушка, если картинка не загрузится */
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .card-content .btn {
+            display: inline-block;
+            background-color: #2a5298;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .card-content .btn:hover {
+            background-color: #1e3c72;
+        }
+
+        /* --- Модальное окно --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            background: #1e3c72;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-body img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body p {
+            margin-bottom: 1rem;
+            color: #444;
+        }
+
+        .modal-body ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Футер --- */
+        footer {
+            background-color: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            #map {
+                height: 350px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header>
+        <h1>🌍 Интерактивный путеводитель по региону</h1>
+        <p>Открой для себя уникальные места, историю и культуру. Проектное задание по созданию туристического маршрута.</p>
+    </header>
+
+    <!-- Навигация -->
+    <nav>
+        <a href="#map-section">Карта маршрута</a>
+        <a href="#points">Точки маршрута</a>
+        <a href="#about">О проекте</a>
+    </nav>
+
+    <div class="container">
+        <!-- Секция карты -->
+        <section id="map-section" class="map-section">
+            <h2>Карта маршрута</h2>
+            <p style="margin-bottom: 1rem; color: #666;">Нажмите на маркеры, чтобы узнать подробнее об остановках.</p>
+            <div id="map"></div>
+        </section>
+
+        <!-- Секция с точками маршрута -->
+        <section id="points">
+            <h2 style="color: #1e3c72; margin-bottom: 1rem;">Остановки маршрута</h2>
+            <div class="grid" id="cards-container">
+                <!-- Карточки будут сгенерированы через JavaScript -->
+            </div>
+        </section>
+
+        <!-- Секция о проекте -->
+        <section id="about" style="margin-top: 3rem; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+            <h2 style="color: #1e3c72; margin-bottom: 1rem;">О проекте</h2>
+            <p>Этот интерактивный путеводитель создан в рамках проектного задания. Он включает в себя карту с отмеченными точками остановок, фотографии и описания объектов.</p>
+            <p><strong>Цель проекта:</strong> разработать историко-культурный туристический маршрут, раскрывающий уникальность выбранного региона.</p>
+            <p><strong>Участники:</strong> [Ваши имена]</p>
+            <p><strong>Технологии:</strong> HTML, CSS, JavaScript, Leaflet (карты).</p>
+        </section>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Название</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Содержимое будет добавлено через JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2026 Интерактивный путеводитель. Проектное задание.</p>
+    </footer>
+
+    <script>
+        // --- Данные для точек маршрута ---
+        // Вы можете легко изменить эти данные под свой регион и маршрут.
+        const pointsData = [
+            {
+                id: 1,
+                name: "Исторический центр города",
+                coords: [55.7558, 37.6173], // Пример: Москва
+                img: "https://picsum.photos/id/1015/600/400", // Замените на реальное фото
+                shortDesc: "Сердце региона, где сосредоточены главные архитектурные и культурные памятники.",
+                fullDesc: `
+                    <p><strong>Исторический центр</strong> — это место, с которого началось основание города. Здесь находятся древние соборы, купеческие усадьбы и административные здания XVIII–XIX веков.</p>
+                    <p><strong>Значимость:</strong> Является объектом культурного наследия федерального значения. Ежегодно привлекает тысячи туристов.</p>
+                    <ul>
+                        <li>Соборная площадь</li>
+                        <li>Краеведческий музей</li>
+                        <li>Памятник основателю города</li>
+                    </ul>
+                `
+            },
+            {
+                id: 2,
+                name: "Музей-заповедник",
+                coords: [55.7600, 37.6300],
+                img: "https://picsum.photos/id/1040/600/400",
+                shortDesc: "Уникальный комплекс, хранящий историю и традиции края.",
+                fullDesc: `
+                    <p><strong>Музей-заповедник</strong> включает в себя старинные постройки, парковую зону и экспозиции, посвящённые быту и ремёслам местных жителей.</p>
+                    <p><strong>Историко-культурная ценность:</strong> Здесь проводятся интерактивные экскурсии и мастер-классы по традиционным промыслам.</p>
+                `
+            },
+            {
+                id: 3,
+                name: "Парк культуры и отдыха",
+                coords: [55.7500, 37.6100],
+                img: "https://picsum.photos/id/1039/600/400",
+                shortDesc: "Живописное место для семейного отдыха и прогулок.",
+                fullDesc: `
+                    <p><strong>Парк культуры</strong> — это зелёный оазис в центре города. Здесь расположены аттракционы, лодочная станция и летняя эстрада.</p>
+                    <p><strong>Экономическая значимость:</strong> Является популярной площадкой для проведения городских ярмарок и фестивалей.</p>
+                `
+            },
+            {
+                id: 4,
+                name: "Промышленная усадьба",
+                coords: [55.7400, 37.6400],
+                img: "https://picsum.photos/id/1062/600/400",
+                shortDesc: "Памятник промышленной архитектуры начала XX века.",
+                fullDesc: `
+                    <p><strong>Промышленная усадьба</strong> — бывшее владение известного купца и мецената. Здание выполнено в стиле эклектики с элементами модерна.</p>
+                    <p><strong>Мемориальная значимость:</strong> Связана с развитием текстильной промышленности в регионе.</p>
+                `
+            },
+            {
+                id: 5,
+                name: "Смотровая площадка",
+                coords: [55.7650, 37.6000],
+                img: "https://picsum.photos/id/1074/600/400",
+                shortDesc: "Отсюда открывается панорамный вид на весь город и окрестности.",
+                fullDesc: `
+                    <p><strong>Смотровая площадка</strong> расположена на высоком холме. Это идеальное место для фотосессий и знакомства с географией региона.</p>
+                    <p><strong>Стратегическая значимость:</strong> В прошлом здесь располагался сторожевой пост.</p>
+                `
+            },
+            {
+                id: 6,
+                name: "Художественная галерея",
+                coords: [55.7450, 37.6200],
+                img: "https://picsum.photos/id/1084/600/400",
+                shortDesc: "Коллекция работ местных художников и мастеров декоративно-прикладного искусства.",
+                fullDesc: `
+                    <p><strong>Художественная галерея</strong> знакомит посетителей с творчеством художников региона. Здесь представлены живопись, графика и скульптура.</p>
+                    <p><strong>Культурная значимость:</strong> Галерея поддерживает молодые таланты и проводит регулярные выставки.</p>
+                `
+            },
+            {
+                id: 7,
+                name: "Набережная реки",
+                coords: [55.7350, 37.6150],
+                img: "https://picsum.photos/id/1090/600/400",
+                shortDesc: "Живописная набережная, любимое место прогулок горожан.",
+                fullDesc: `
+                    <p><strong>Набережная</strong> была благоустроена в рамках программы развития городской среды. Здесь проложены велодорожки и установлены скамейки.</p>
+                    <p><strong>Экологическая значимость:</strong> Важная рекреационная зона города.</p>
+                `
+            },
+            {
+                id: 8,
+                name: "Дом-музей известного писателя",
+                coords: [55.7520, 37.6250],
+                img: "https://picsum.photos/id/1100/600/400",
+                shortDesc: "Место, где жил и работал выдающийся деятель культуры.",
+                fullDesc: `
+                    <p><strong>Дом-музей</strong> сохранил подлинную обстановку и личные вещи писателя. Экспозиция рассказывает о его жизни и творчестве.</p>
+                    <p><strong>Мемориальная значимость:</strong> Объект включён в список памятников истории и культуры.</p>
+                `
+            },
+            {
+                id: 9,
+                name: "Монастырь",
+                coords: [55.7580, 37.6050],
+                img: "https://picsum.photos/id/1110/600/400",
+                shortDesc: "Древняя обитель, центр духовной жизни региона.",
+                fullDesc: `
+                    <p><strong>Монастырь</strong> основан в XVI веке. Архитектурный ансамбль включает собор, колокольню и братский корпус.</p>
+                    <p><strong>Религиозная и культурная значимость:</strong> Действующий монастырь, открытый для паломников и туристов.</p>
+                `
+            },
+            {
+                id: 10,
+                name: "Современный арт-квартал",
+                coords: [55.7480, 37.6350],
+                img: "https://picsum.photos/id/1120/600/400",
+                shortDesc: "Пространство для креативных индустрий и молодёжных проектов.",
+                fullDesc: `
+                    <p><strong>Арт-квартал</strong> — это бывшая промышленная зона, преобразованная в центр современного искусства. Здесь находятся мастерские, кафе и выставочные залы.</p>
+                    <p><strong>Экономическая значимость:</strong> Точка притяжения для туристов и местных жителей, способствует развитию малого бизнеса.</p>
+                `
+            }
+        ];
+
+        // --- Инициализация карты ---
+        // Координаты центра карты (можно изменить под свой регион)
+        const mapCenter = [55.7558, 37.6173]; 
+        const mapZoom = 13;
+
+        const map = L.map('map').setView(mapCenter, mapZoom);
+
+        // Добавляем слой карты (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Массив для хранения маркеров
+        const markers = [];
+
+        // Функция для открытия модального окна
+        function openModal(pointId) {
+            const point = pointsData.find(p => p.id === pointId);
+            if (!point) return;
+
+            document.getElementById('modal-title').textContent = point.name;
+            document.getElementById('modal-body').innerHTML = `
+                <img src="${point.img}" alt="${point.name}">
+                ${point.fullDesc}
+            `;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        // Функция для закрытия модального окна
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Закрытие по клику вне окна
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие по кнопке
+        document.getElementById('close-modal').addEventListener('click', closeModal);
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // --- Генерация карточек и маркеров ---
+        const cardsContainer = document.getElementById('cards-container');
+
+        pointsData.forEach(point => {
+            // 1. Создание маркера на карте
+            const marker = L.marker(point.coords).addTo(map);
+            
+            // Всплывающая подсказка при наведении
+            marker.bindPopup(`
+                <strong>${point.name}</strong><br>
+                <button onclick="openModal(${point.id})" style="margin-top:5px; background:#2a5298; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Подробнее</button>
+            `);
+            
+            // Сохраняем маркер для возможного использования
+            markers.push(marker);
+
+            // 2. Создание карточки в сетке
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${point.img}" alt="${point.name}" loading="lazy">
+                <div class="card-content">
+                    <h3>${point.name}</h3>
+                    <p>${point.shortDesc}</p>
+                    <button class="btn" onclick="openModal(${point.id})">Подробнее</button>
+                </div>
+            `;
+            cardsContainer.appendChild(card);
+        });
+
+        // Добавляем линию маршрута (опционально)
+        const routeCoords = pointsData.map(p => p.coords);
+        const polyline = L.polyline(routeCoords, {
+            color: '#e74c3c',
+            weight: 3,
+            opacity: 0.7,
+            dashArray: '10, 10'
+        }).addTo(map);
+
+        // Масштабируем карту под все маркеры
+        if (markers.length > 0) {
+            const group = new L.featureGroup(markers);
+            map.fitBounds(group.getBounds().pad(0.1));
+        }
+
+        // Делаем функцию openModal глобальной, чтобы она была доступна из HTML-атрибутов onclick
+        window.openModal = openModal;
+
+        // Плавная прокрутка для навигации
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>.badge{display:inline-block;padding:6px 14px;border-radius:999px;font-size:13px;
   background:color-mix(in srgb,var(--accent) 18%, transparent);color:var(--accent);
   border:1px solid color-mix(in srgb,var(--accent) 40%, transparent);margin-bottom:16px;}
 h1{font-size:clamp(32px,5.5vw,64px);line-height:1.05;margin:0 0 16px;
